@@ -6,6 +6,10 @@ dotenv.config({
     path: './env'
 })
 
+app.get("/", (req, res) => {
+    console.log("Hi");
+    return res.status(200)
+})
 
 connectDB()
     .then(() => {
