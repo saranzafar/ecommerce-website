@@ -4,7 +4,8 @@ import mongoose, { Schema } from "mongoose";
 const categorieSchema = new Schema({
     name: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     products: [{
         type: Schema.Types.ObjectId,
@@ -13,4 +14,4 @@ const categorieSchema = new Schema({
 }, { timestamps: true })
 
 
-export const Categorie = mongoose.model('Categorie', categorieSchema);
+export const Category = mongoose.model('Category', categorieSchema);

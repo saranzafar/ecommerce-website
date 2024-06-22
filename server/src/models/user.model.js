@@ -17,6 +17,10 @@ const userschema = new Schema({
         lowercase: true,
         trim: true,
     },
+    emailVerified: {
+        type: Boolean,
+        default: false,
+    },
     password: {
         type: String,
         required: [true, "Password is required"],
@@ -30,6 +34,11 @@ const userschema = new Schema({
         unique: true,
         required: true,
         index: true
+    },
+    isAdmin: {
+        type: Boolean,
+        require: false,
+        default: false
     },
     refreshToken: {
         type: String,
