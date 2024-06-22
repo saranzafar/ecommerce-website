@@ -7,7 +7,11 @@ const productSchema = new Schema({
         type: String,
         required: true
     },
-    images: {
+    primaryImage: {
+        type: String,
+        require: true
+    },
+    secondaryImages: {
         type: [String],
         require: true
     },
@@ -38,10 +42,6 @@ const productSchema = new Schema({
     category: {
         type: Schema.Types.ObjectId,
         ref: "Categorie"
-    },
-    isPublished: {
-        type: Boolean,
-        default: true
     },
 }, { timestamps: true })
 
