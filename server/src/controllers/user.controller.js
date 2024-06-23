@@ -3,6 +3,7 @@ import { User } from "../models/user.model.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { apiError } from "../utils/apiError.js"
 import { sendMail } from "../utils/sendMail.js"
+import jwt from "jsonwebtoken"
 
 let randomNumber = 0
 
@@ -138,10 +139,7 @@ const loginUser = asyncHandler(async (req, res) => {
         .cookie("refreshToken", refreshToken, options)
         .json(
             new apiResponse(
-                200,
-                {
-                    user: loggedInUser, accessToken, refreshToken
-                },
+                200, { user: loggedInUser, accessToken },
                 "User Loggined Successfully"
             )
         )
@@ -153,6 +151,10 @@ const sendEmail = asyncHandler(async (req, res) => {
         throw new apiError(403, "Email is require")
     }
 
+    const user = await User.findOne({ email }).select("-password -refreshToken")
+    if (!user) {
+        throw new apiError(404, "Email not found")
+    }
     // sending mail
     let str = ""
     for (let i = 0; i < 6; i++) {
@@ -187,39 +189,113 @@ const sendEmail = asyncHandler(async (req, res) => {
         </body>
         </html>
         `;
-    await sendMail(email, mailSubject, "", mailHtml)
-    console.log("randomNumber = ", randomNumber, "Six = ", Number(sixDigits));
+    // await sendMail(email, mailSubject, "", mailHtml)
 
     return res.status(200).json(new apiResponse(200, {}, "Email sent to your Mailbox"))
 })
 
 const emailVerification = asyncHandler(async (req, res) => {
-    const { sixDigits } = req.body
-    if (!sixDigits) {
-        throw new apiError(403, "Please enter 6-digits we sent you through email")
-    }
-    console.log("randomNumber = ", randomNumber, "Six = ", Number(sixDigits));
+    const { sixDigits, email } = req.body;
 
-    if ((Number(sixDigits)) === randomNumber) {
-        return res.status(200).json(new apiResponse(200, {}, "Email is verified"))
+    if (!sixDigits || !email) {
+        throw new apiError(403, "Please enter the 6-digits we sent you through email and your email address");
     }
-    else {
-        return res.status(200).json(new apiResponse(200, {}, "Incorrect Digits"))
+
+    if (Number(sixDigits) === randomNumber) {
+        const user = await User.findOne({ email });
+        if (!user) {
+            throw new apiError(404, "Email not found");
+        }
+
+        user.emailVerified = true;
+        await user.save();
+
+        return res.status(200).json(new apiResponse(200, user, "Email is verified"));
+    } else {
+        return res.status(400).json(new apiResponse(400, {}, "Incorrect digits"));
     }
-})
+});
 
 const changePassword = asyncHandler(async (req, res) => {
-    const { email, newPassword } = req.body
-    if (!email || !newPassword) {
-        throw new apiError(403, "Please enter Email and new Password")
+    const { newPassword } = req.body;
+    if (!newPassword) {
+        throw new apiError(403, "New Password is required");
     }
-    const user = await User.findById(req.user?._id)
-    user.password = newPassword
-    await user.save({ validateBeforeSave: false })
 
-    return res.status(200).json(new ApiResponse(200, {}, 'Password Changed Succssfully'))
+    // Find the user by ID
+    const user = await User.findById(req.user._id);
+    if (!user) {
+        throw new apiError(404, "User not found");
+    }
+
+    user.password = newPassword;
+    await user.save();
+
+    // Exclude password and refreshToken fields from the response
+    const updatedUser = await User.findById(user._id).select("-password -refreshToken");
+
+    return res.status(200).json(new apiResponse(200, updatedUser, 'Password changed successfully'));
+});
+
+const refreshAccessToken = asyncHandler(async (req, res) => {
+    const incommingRefreshToken = req.cookies?.refreshToken || req.body?.refreshToken
+    if (!incommingRefreshToken) {
+        throw new apiError(401, "Unauthorized Access")
+    }
+
+    try {
+    const decodedToken = jwt.verify(
+        incommingRefreshToken,
+        process.env.REFRESH_TOKEN_SECRET
+    )
+
+    const user = await User.findById(decodedToken?._id)
+    if (!user) {
+        throw new apiError(401, "Invalid Refresh Token")
+    }
+
+    if (incommingRefreshToken !== user?.refreshToken) {
+        throw new apiError(401, "Refresh Token is Expired or used")
+    }
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+    const { accessToken, newrefreshToken } = await generateAccessAndRefreshTokens(user._id)
+    return res
+        .status(200)
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", newrefreshToken, options)
+        .json(
+            new apiResponse(
+                200,
+                { accessToken, refreshToken: newrefreshToken },
+                "Access Token Refreshed Successfully"
+            )
+        )
+    } catch (error) {
+        throw new apiError(401, error?.messame || "Invalid Refresh Token")
+    }
+
 })
 
+const logoutUser = asyncHandler(async (req, res) => {
+    User.findByIdAndUpdate(
+        req.user._id,
+        { $unset: { refreshToken: 1 } },//remove field from document
+        { new: true }
+    )
+
+    const options = {
+        httpOnly: true,
+        secure: true
+    }
+    return res.status(200).
+        clearCookie("accessToken", options)
+        .clearCookie("refreshToken", options)
+        .json(new apiResponse(200, {}, "User Logged Out"))
+})
 
 export {
     registerUser,
@@ -227,4 +303,6 @@ export {
     emailVerification,
     sendEmail,
     changePassword,
+    refreshAccessToken,
+    logoutUser
 }

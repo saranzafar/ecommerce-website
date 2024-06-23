@@ -2,7 +2,8 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { apiError } from "../utils/apiError.js"
 import { Product } from "../models/product.model.js";
-
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { v2 as cloudinary } from "cloudinary";
 
 
 const addProduct = asyncHandler(async (req, res) => {
@@ -19,7 +20,6 @@ const addProduct = asyncHandler(async (req, res) => {
 
     // Check for secondary images
     const secondaryImagesLocalPaths = req.files?.secondaryImages?.map(file => file.path) || [];
-
     // Upload primary image to cloudinary
     const primaryImageUpload = await uploadOnCloudinary(primaryImageLocalPath);
     if (!primaryImageUpload) {
@@ -59,7 +59,7 @@ const addProduct = asyncHandler(async (req, res) => {
 const updateProduct = asyncHandler(async (req, res) => {
     const { productId } = req.params;
     const { name, description, price, sale, quantity } = req.body;
-
+    console.log(productId);
     // Find the product by ID
     const product = await Product.findById(productId);
     if (!product) {
@@ -81,35 +81,6 @@ const updateProduct = asyncHandler(async (req, res) => {
     );
 });
 
-const deleteProduct = asyncHandler(async (req, res) => {
-    const { productId } = req.params; // Assuming the product ID is passed as a URL parameter
-
-    // Find the product by ID
-    const product = await Product.findById(productId);
-    if (!product) {
-        throw new apiError(404, "Product not found");
-    }
-
-    // Delete images from Cloudinary
-    if (product.primaryImage) {
-        await cloudinary.uploader.destroy(product.primaryImage.public_id);
-    }
-    if (product.secondaryImages && product.secondaryImages.length > 0) {
-        await Promise.all(
-            product.secondaryImages.map(async (image) => {
-                await cloudinary.uploader.destroy(image.public_id);
-            })
-        );
-    }
-
-    // Delete the product
-    await product.remove();
-
-    return res.status(200).json(
-        new apiResponse(200, "Product deleted successfully")
-    );
-});
-
 const getSingleProduct = asyncHandler(async (req, res) => {
     const { productId } = req.params
 
@@ -119,9 +90,40 @@ const getSingleProduct = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json(
-        new apiResponse(200, "Product Fetched successfully")
+        new apiResponse(200, product, "Product Fetched successfully")
     );
 })
+
+const deleteProduct = asyncHandler(async (req, res) => {
+    const { productId } = req.params; // Assuming the product ID is passed as a URL parameter
+
+    // Find the product by ID
+    const product = await Product.findByIdAndDelete(productId);
+    if (!product) {
+        throw new apiError(404, "Product not found");
+    }
+
+
+    // Delete images from Cloudinary
+    // if (product.primaryImage) {
+    //     await cloudinary.uploader.destroy(product.primaryImage.public_id);
+    // }
+    // if (product.secondaryImages && product.secondaryImages.length > 0) {
+    //     await Promise.all(
+    //         product.secondaryImages.map(async (image) => {
+    //             await cloudinary.uploader.destroy(image.public_id);
+    //         })
+    //     );
+    // }
+
+    // Delete the product
+    // await product.remove();
+
+    return res.status(200).json(
+        new apiResponse(200, "Product deleted successfully")
+    );
+});
+
 
 export {
     addProduct,
