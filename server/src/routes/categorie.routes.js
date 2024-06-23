@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { verifyJwt } from "../middlewares/auth.middleware";
+import { verifyJwt } from "../middlewares/auth.middleware.js";
 import {
     addCategory,
     removeCategory,
@@ -13,20 +13,20 @@ const router = Router();
 
 router.use(verifyJwt); // Apply JWT verification to all routes
 
-router.route('/categories')
+router.route('/category')
     .post(addCategory)
     .get(fetchAllCategories);
 
-router.route('/categories/add-product')
+router.route('/add-product')
     .post(addProductToCategory);
 
-router.route('/categories/:id')
+router.route('/delete-category/:id')
     .delete(removeCategory);
 
-router.route('/categories/:categoryId/products/:productId')
+router.route('/category/:categoryId/products/:productId')
     .delete(removeProductFromCategory);
 
-router.route('/categories/:categoryId/products')
+router.route('/category/:categoryId/products')
     .get(getAllProductsInCategory);
 
 export default router;

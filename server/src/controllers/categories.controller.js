@@ -1,7 +1,7 @@
-import { Category } from "../models/categorie.model";
-import { apiError } from "../utils/apiError";
-import { asyncHandler } from "../utils/asyncHandler";
-import { ApiResponse } from "../utils/apiResponse"; // Assuming you have this utility
+import { Category } from "../models/categorie.model.js";
+import { apiError } from "../utils/apiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { apiResponse } from "../utils/apiResponse.js"; // Assuming you have this utility
 
 const addCategory = asyncHandler(async (req, res) => {
     const { name } = req.body;
@@ -15,7 +15,7 @@ const addCategory = asyncHandler(async (req, res) => {
     }
 
     return res.status(201).json(
-        new ApiResponse(201, "Category added successfully", createdCategory)
+        new apiResponse(201, "Category added successfully", createdCategory)
     );
 });
 
@@ -34,7 +34,7 @@ const addProductToCategory = asyncHandler(async (req, res) => {
         // Check if the productId already exists in the category
         if (availableCategory.products?.includes(productId)) {
             return res.status(200).json(
-                new ApiResponse(200, availableCategory, "Product already exists in Category")
+                new apiResponse(200, availableCategory, "Product already exists in Category")
             );
         }
 
@@ -43,18 +43,18 @@ const addProductToCategory = asyncHandler(async (req, res) => {
         await availableCategory.save();
 
         return res.status(200).json(
-            new ApiResponse(200, availableCategory, "Product added to Category")
+            new apiResponse(200, availableCategory, "Product added to Category")
         );
 
     } catch (error) {
         // Handle any potential errors
         if (error instanceof apiError) {
             return res.status(error.statusCode).json(
-                new ApiResponse(error.statusCode, null, error.message)
+                new apiResponse(error.statusCode, null, error.message)
             );
         } else {
             return res.status(500).json(
-                new ApiResponse(500, null, "Error while adding product to Category")
+                new apiResponse(500, null, "Error while adding product to Category")
             );
         }
     }
@@ -64,21 +64,18 @@ const removeCategory = asyncHandler(async (req, res) => {
     const { id } = req.params; // Assuming the category ID is passed as a URL parameter
 
     // Find the category by ID
-    const category = await Category.findById(id);
+    const category = await Category.findByIdAndDelete(id);
     if (!category) {
         throw new apiError(404, "Category not found");
     }
 
-    // Remove the category
-    await category.remove();
-
     return res.status(200).json(
-        new ApiResponse(200, "Category removed successfully")
+        new apiResponse(200, "Category removed successfully")
     );
 });
 
 const removeProductFromCategory = asyncHandler(async (req, res) => {
-    const { categoryId, productId } = req.params; // Assuming category ID and product ID are passed as URL parameters
+    const { categoryId, productId } = req.params;
 
     // Find the category by ID
     const category = await Category.findById(categoryId);
@@ -97,19 +94,20 @@ const removeProductFromCategory = asyncHandler(async (req, res) => {
     await category.save();
 
     return res.status(200).json(
-        new ApiResponse(200, "Product removed from category successfully", category)
+        new apiResponse(200, "Product removed from category successfully", category)
     );
 });
 
 const fetchAllCategories = asyncHandler(async (req, res) => {
     const categories = await Category.find().populate('products');
+    //also fetch documents which relate to this document (populate)
 
     if (!categories) {
         throw new apiError(404, "No categories found");
     }
 
     return res.status(200).json(
-        new ApiResponse(200, "Categories fetched successfully", categories)
+        new apiResponse(200, "Categories fetched successfully", categories)
     );
 });
 
