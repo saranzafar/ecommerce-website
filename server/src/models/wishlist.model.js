@@ -3,6 +3,10 @@ import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2"
 
 
 const wishlistSchema = new Schema({
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+    },
     products: [{
         type: Schema.Types.ObjectId,
         ref: "Product",

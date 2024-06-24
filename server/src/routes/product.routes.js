@@ -6,6 +6,8 @@ import {
     updateProduct,
     deleteProduct,
     getSingleProduct,
+    addReview,
+    getProductReviews
 } from "../controllers/product.controller.js";
 
 const router = Router()
@@ -29,5 +31,8 @@ router.route('/:productId')
     .get(getSingleProduct)
     .patch(updateProduct)
     .delete(deleteProduct);
+router.route('/review/:productId')
+    .patch(addReview)
+    .get(getProductReviews)
 
 export default router

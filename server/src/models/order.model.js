@@ -16,14 +16,14 @@ const orderSchema = new Schema({
             type: Number,
             required: true
         },
-    }],
+    },],
     totalprice: {
         type: Number,
         require: true
     },
     status: {
         type: String,
-        enum: ["pending", "shipped", "delivered"],
+        enum: ["pending", "shipped", "delivered", "cancel"],
         default: "pending"
     },
 

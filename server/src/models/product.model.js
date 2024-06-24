@@ -1,6 +1,27 @@
 import mongoose, { Schema } from "mongoose";
 import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
+const reviewSchema = new Schema({
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+        required: true
+    },
+    text: {
+        type: String,
+        required: true
+    },
+    rating: {
+        type: Number,
+        required: true,
+        min: 1,
+        max: 5
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
+    }
+});
 
 const productSchema = new Schema({
     name: {
@@ -9,11 +30,11 @@ const productSchema = new Schema({
     },
     primaryImage: {
         type: String,
-        require: true
+        required: true
     },
     secondaryImages: {
         type: [String],
-        require: true
+        required: true
     },
     description: {
         type: String,
@@ -31,20 +52,14 @@ const productSchema = new Schema({
         type: Number,
         required: true
     },
-    rating: {
-        type: [Number],
-        require: false
-    },
-    reviews: {
-        type: [String],
-        require: false
-    },
     category: {
         type: Schema.Types.ObjectId,
-        ref: "Categorie"
+        ref: "Category"
     },
-}, { timestamps: true })
+    reviews: [reviewSchema]  // Embedding reviews as subdocuments
+}, { timestamps: true });
 
-productSchema.plugin(mongooseAggregatePaginate)
+productSchema.plugin(mongooseAggregatePaginate);
 
 export const Product = mongoose.model('Product', productSchema);
+export const Review = mongoose.model('Review', reviewSchema);

@@ -1,7 +1,7 @@
-import { Wishlist } from "../models/wishlist.model";
-import { apiError } from "../utils/apiError";
-import { asyncHandler } from "../utils/asyncHandler";
-import { ApiResponse } from "../utils/apiResponse"; // Assuming you have this utility
+import { Wishlist } from "../models/wishlist.model.js";
+import { apiError } from "../utils/apiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { apiResponse } from "../utils/apiResponse.js"; // Assuming you have this utility
 
 const addProductToWishlist = asyncHandler(async (req, res) => {
     const { productId } = req.body;
@@ -18,7 +18,7 @@ const addProductToWishlist = asyncHandler(async (req, res) => {
     } else {
         if (wishlist.products.includes(productId)) {
             return res.status(200).json(
-                new ApiResponse(200, "Product already in wishlist", wishlist)
+                new apiResponse(200, "Product already in wishlist", wishlist)
             );
         }
         wishlist.products.push(productId);
@@ -26,7 +26,7 @@ const addProductToWishlist = asyncHandler(async (req, res) => {
     }
 
     return res.status(200).json(
-        new ApiResponse(200, "Product added to wishlist successfully", wishlist)
+        new apiResponse(200, "Product added to wishlist successfully", wishlist)
     );
 });
 
@@ -48,7 +48,7 @@ const removeProductFromWishlist = asyncHandler(async (req, res) => {
     await wishlist.save();
 
     return res.status(200).json(
-        new ApiResponse(200, "Product removed from wishlist successfully", wishlist)
+        new apiResponse(200, "Product removed from wishlist successfully", wishlist)
     );
 });
 

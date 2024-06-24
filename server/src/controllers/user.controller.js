@@ -92,42 +92,6 @@ const loginUser = asyncHandler(async (req, res) => {
     const { accessToken, refreshToken } = await generateAccessAndRefreshTokens(user._id);
     const loggedInUser = await User.findById(user._id).select('-password -refreshToken');
 
-    // sending mail
-    let str = ""
-    for (let i = 0; i < 6; i++) {
-        let randomNumber = Math.floor(Math.random() * 9) + 1;
-        str = str + randomNumber
-    }
-    randomNumber = Number(str)
-
-    const mailSubject = "Your Verification Code From The Ecommerce-store"
-    const mailHtml = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>Your Verification Code</title>
-            <style>
-                body {
-                    font-size: 20px;
-                    font-family: Arial, sans-serif;
-                }
-                strong {
-                    font-size: 22px; 
-                }
-            </style>
-        </head>
-        <body>
-            <p>Dear User,</p>
-            <p>Your verification code is: <strong>${randomNumber}</strong></p>
-            <p>Please use this code to complete your verification process. If you did not request this code, please disregard this email.</p>
-            <p>Thank you,</p>
-            <p><em><a href="https://ecommerce-store.com" target="_blank" style="text-decoration: none; color: #000;">Ecommerce-store.com Support Team</a></em></p>
-        </body>
-        </html>
-        `;
-    await sendMail(email, mailSubject, "", mailHtml)
-
     // send cookies
     const options = {
         httpOnly: true,
