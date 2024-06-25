@@ -129,31 +129,48 @@ const sendEmail = asyncHandler(async (req, res) => {
 
     const mailSubject = "Your Verification Code From The Ecommerce-store"
     const mailHtml = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>Your Verification Code</title>
-            <style>
-                body {
-                    font-size: 20px;
-                    font-family: Arial, sans-serif;
-                }
-                strong {
-                    font-size: 22px; 
-                }
-            </style>
-        </head>
-        <body>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Your Verification Code</title>
+        <style>
+            body {
+                font-size: 20px;
+                font-family: Arial, sans-serif;
+            }
+            strong {
+                font-size: 22px; 
+            }
+            .email-container {
+                margin: 20px;
+                padding: 20px;
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                background-color: #f9f9f9;
+            }
+            .email-footer {
+                margin-top: 20px;
+                font-size: 18px;
+                color: #555;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="email-container">
             <p>Dear User,</p>
             <p>Your verification code is: <strong>${randomNumber}</strong></p>
             <p>Please use this code to complete your verification process. If you did not request this code, please disregard this email.</p>
-            <p>Thank you,</p>
-            <p><em><a href="https://ecommerce-store.com" target="_blank" style="text-decoration: none; color: #000;">Ecommerce-store.com Support Team</a></em></p>
-        </body>
-        </html>
-        `;
-    // await sendMail(email, mailSubject, "", mailHtml)
+            <div class="email-footer">
+                <p>Thank you,</p>
+                <p><em><a href="https://ecommerce-store.com" target="_blank" style="text-decoration: none; color: #000;">Ecommerce-store.com Support Team</a></em></p>
+            </div>
+        </div>
+    </body>
+    </html>
+    `;
+    
+    await sendMail(email, mailSubject, "", mailHtml)
 
     return res.status(200).json(new apiResponse(200, {}, "Email sent to your Mailbox"))
 })

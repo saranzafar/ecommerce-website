@@ -9,6 +9,6 @@ const router = Router()
 router.use(verifyJwt)
 
 router.route('/place-order').post(placeOrder)
-router.route('/order-status').post(changeOrderStatus)
+router.route('/order-status').patch(changeOrderStatus)
 
 export default router

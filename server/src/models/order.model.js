@@ -1,6 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2"
-
+import mongooseAggregatePaginate from "mongoose-aggregate-paginate-v2";
 
 const orderSchema = new Schema({
     buyer: {
@@ -8,7 +7,7 @@ const orderSchema = new Schema({
         ref: "User"
     },
     products: [{
-        productdetails: {
+        productId: {
             type: Schema.Types.ObjectId,
             ref: "Product",
         },
@@ -16,18 +15,22 @@ const orderSchema = new Schema({
             type: Number,
             required: true
         },
-    },],
+    }],
     totalprice: {
         type: Number,
-        require: true
+        required: true
     },
     status: {
         type: String,
         enum: ["pending", "shipped", "delivered", "cancel"],
         default: "pending"
     },
+    address: {
+        type: String,
+        required: true
+    }
 
-}, { timestamps: true })
+}, { timestamps: true });
 
-orderSchema.plugin(mongooseAggregatePaginate)
+orderSchema.plugin(mongooseAggregatePaginate);
 export const Order = mongoose.model('Order', orderSchema);
