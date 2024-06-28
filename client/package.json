@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.1.1",
+    "@heroicons/react": "^2.1.4",
     "@reduxjs/toolkit": "^2.2.5",
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.10.1",

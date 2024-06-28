@@ -1,43 +1,53 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Card, ShareIcons, ImageCrousal, GallerySection } from '../components/supportive'
+import { Alerts } from '../components/alterts'
 
 function Home() {
+    // const [shoppingCartVisibility, setShoppingCartVisibility] = useState(false)
     return (
         <div className='w-auto'>
             <div className='max-w-screen-xl text-center mx-auto main-container'>
+                <ShareIcons />
+                {/* 1st Top-Section */}
                 <div className='grid grid-cols-2'>
-                    <div className=' flex flex-col border items-center'>
-                        <h1
-                            className=' text-5xl font-semibold font-serif'
-                        >Just Buy It!</h1>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore similique suscipit itaque illo nam, laboriosam esse unde earum voluptate quisquam libero maxime delectus. Ab reiciendis laboriosam eligendi excepturi unde voluptatibus?</p>
+                    <div className=' flex flex-col items-center justify-center gap-4 '>
+                        <section className="bg-white dark:bg-gray-900">
+                            <div className="py-8  mx-auto max-w-screen-xl text-center lg:py-16">
+                                <h1 className="mb-4 text-4xl font-extrabold tracking-tight leading-none text-gray-900 md:text-5xl lg:text-6xl dark:text-white">We invest in the world’s potential</h1>
+                                <p className="mb-8 text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">Here at Flowbite we focus on markets where technology, innovation, and capital can unlock long-term value and drive economic growth.</p>
+                                <div className="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0">
+                                    <Link to="#" className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900">
+                                        Get started
+                                        <svg className="w-3.5 h-3.5 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
+                                            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
+                                        </svg>
+                                    </Link>
+                                    <Link to="#" className="py-3 px-5 sm:ms-4 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-70">
+                                        Learn more
+                                    </Link>
+                                </div>
+                            </div>
+                        </section>
                     </div>
-                    <div id="default-carousel" className="w-full mx-auto items-center " data-carousel="slide">
-                        <div className="relative h-56 overflow-hidden rounded-lg md:h-96">
-                            <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                                <img src="https://t3.ftcdn.net/jpg/00/70/38/52/360_F_70385271_bLH529ZIJ5pA6jQ0JedCl8SdJilalSqD.jpg" className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
-                            </div>
-                            <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPLDQCFHei_LaOOxqwDYXVxOzKpe3sOytyhA&s" className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
-                            </div>
-                            <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                                <img src="/https://wallpapercave.com/wp/wp3137847.jpg" className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
-                            </div>
-                            <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSoRXi8Acym-kXqKRZNbOOPCLWxvqZHqp71g&s" className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
-                            </div>
-                            <div className="hidden duration-700 ease-in-out" data-carousel-item>
-                                <img src="https://wallpapercave.com/wp/wp3137847.jpg" className="absolute block w-full -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2" alt="..." />
-                            </div>
-                        </div>
-                        <div className="flex justify-center bottom-5 left-1/2 space-x-3 rtl:space-x-reverse">
-                            <button type="button" className="w-3 h-3 rounded-full dot-btn" aria-current="true" aria-label="Slide 1" data-carousel-slide-to="0"></button>
-                            <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 2" data-carousel-slide-to="1"></button>
-                            <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 3" data-carousel-slide-to="2"></button>
-                            <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 4" data-carousel-slide-to="3"></button>
-                            <button type="button" className="w-3 h-3 rounded-full" aria-current="false" aria-label="Slide 5" data-carousel-slide-to="4"></button>
-                        </div>
+                    <ImageCrousal />
+                </div>
+
+                {/* 2nd Section */}
+                <div className=' mt-32 pt-32'>
+                    <div className=' mb-6 pb-6'>
+                        <h4 className="mb-4 text-4xl font-semibold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-5xl dark:text-white">Get <mark className="px-2 text-white bg-blue-600 rounded dark:bg-blue-500">20%</mark> off!!</h4>
+                        <p className="text-lg font-normal text-gray-500 lg:text-xl dark:text-gray-400">Here at Flowbite we focus on markets where technology, innovation, and capital can unlock long-term value and drive economic growth.</p>
+                    </div>
+                    <div className='flex justify-between'>
+                        <Card />
+                        <Card />
+                        <Card />
                     </div>
                 </div>
+
+                {/* 3nd Section */}
+                <GallerySection />
             </div>
         </div>
     )
