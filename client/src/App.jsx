@@ -6,10 +6,12 @@ function App() {
 
   return (
     <div className="App">
-      <main>
-        <Header />
-        <Outlet />
-        <Footer />
+      <main className="w-full flex justify-center">
+        <main className="container max-w-screen-xl px-6">
+          <Header />
+          <Outlet />
+          <Footer />
+        </main>
       </main>
     </div>
   );

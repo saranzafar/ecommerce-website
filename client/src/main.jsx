@@ -1,10 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
-import 'flowbite';
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Home, About, Cart, Shop, Wishlist, PageNotFound } from "./pages/index.js";
+import { Home, ContactUs } from "./pages/index.js";
 
 
 const router = createBrowserRouter([
@@ -19,41 +18,17 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/shop",
+        path: "/contact",
         element: (
-          <Shop />
+          <ContactUs />
         ),
-      },
-      {
-        path: '/about',
-        element: (
-          <About />
-        )
-      },
-      {
-        path: "/wishlist",
-        element: (
-          <Wishlist />
-        ),
-      },
-      {
-        path: "/cart",
-        element: (
-          <Cart />
-        ),
-      },
-      {
-        path: "*",
-        element: (
-          <PageNotFound />
-        ),
-      },
+      }
     ]
   }
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-      <RouterProvider router={router} />
+    <RouterProvider router={router} />
   </React.StrictMode>,
 )
