@@ -1,4 +1,5 @@
 import React from 'react'
+import { FAQs } from "../components/index.js"
 
 function ContactUs() {
     return (
@@ -88,7 +89,7 @@ function ContactUs() {
                                     </div>
                                     <button
                                         type="button"
-                                        className="w-full rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                                        className="w-full rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-supportivePrimary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
                                     >
                                         Send Message
                                     </button>
@@ -98,8 +99,14 @@ function ContactUs() {
                         <img
                             alt="Contact us"
                             className="hidden max-h-full w-full rounded-lg object-cover lg:block"
-                            src="https://images.unsplash.com/photo-1543269664-56d93c1b41a6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzZ8fGhhcHB5JTIwcGVvcGxlfGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=800&q=60"
+                            src="public/imgs/contact.png"
                         />
+                    </div>
+                    <hr className="border-gray-500 dark:border-white w-4/5 text-center mx-auto my-24" />
+                    <h2 className="block text-xl font-bold text-gray-800 sm:text-2xl md:text-4xl lg:text-5xl dark:text-white mb-6 text-center">Frequently asked questions</h2>
+                    <p className="mt-3 text-lg text-gray-800 dark:text-neutral-400 text-center mb-16">Introducing a new way for your brand to reach the creative community.</p>
+                    <div className=''>
+                        <FAQs />
                     </div>
                 </div>
             </div>

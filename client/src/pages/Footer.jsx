@@ -1,9 +1,10 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 function Footer() {
     return (
         <div className='mt-10'>
-            <hr/>
+            <hr />
             <footer className="bg-white transition-all duration-500">
                 <div className="mx-auto max-w-screen-xl space-y-8 px-4 py-16 sm:px-6 lg:space-y-16 lg:px-8">
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
@@ -60,8 +61,8 @@ function Footer() {
 
                             <ul className="mt-8 flex gap-6">
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="#"
                                         rel="noreferrer"
                                         target="_blank"
                                         className="text-gray-700 transition hover:text-supportivePrimary hover:underline"
@@ -75,12 +76,12 @@ function Footer() {
                                                 clipRule="evenodd"
                                             />
                                         </svg>
-                                    </a>
+                                    </Link>
                                 </li>
 
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="#"
                                         rel="noreferrer"
                                         target="_blank"
                                         className="text-gray-700 transition hover:text-supportivePrimary hover:underline"
@@ -94,12 +95,12 @@ function Footer() {
                                                 clipRule="evenodd"
                                             />
                                         </svg>
-                                    </a>
+                                    </Link>
                                 </li>
 
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="#"
                                         rel="noreferrer"
                                         target="_blank"
                                         className="text-gray-700 transition hover:text-supportivePrimary hover:underline"
@@ -111,12 +112,12 @@ function Footer() {
                                                 d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"
                                             />
                                         </svg>
-                                    </a>
+                                    </Link>
                                 </li>
 
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="#"
                                         rel="noreferrer"
                                         target="_blank"
                                         className="text-gray-700 transition hover:text-supportivePrimary hover:underline"
@@ -130,12 +131,12 @@ function Footer() {
                                                 clipRule="evenodd"
                                             />
                                         </svg>
-                                    </a>
+                                    </Link>
                                 </li>
 
                                 <li>
-                                    <a
-                                        href="#"
+                                    <Link
+                                        to="#"
                                         rel="noreferrer"
                                         target="_blank"
                                         className="text-gray-700 transition hover:text-supportivePrimary hover:underline"
@@ -149,52 +150,38 @@ function Footer() {
                                                 clipRule="evenodd"
                                             />
                                         </svg>
-                                    </a>
+                                    </Link>
                                 </li>
                             </ul>
                         </div>
 
                         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4">
                             <div>
-                                <p className="font-medium text-gray-900">Services</p>
+                                <p className="font-medium text-gray-900">Categories</p>
 
                                 <ul className="mt-6 space-y-4 text-sm">
                                     <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> 1on1 Coaching </a>
+                                        <Link to="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Category 1 </Link>
                                     </li>
-
                                     <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Company Review </a>
+                                        <Link to="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Category 2 </Link>
                                     </li>
-
                                     <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Accounts Review </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> HR Consulting </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> SEO Optimisation </a>
+                                        <Link to="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Category 3</Link>
                                     </li>
                                 </ul>
                             </div>
 
                             <div>
-                                <p className="font-medium text-gray-900">Company</p>
+                                <p className="font-medium text-gray-900">Owner</p>
 
                                 <ul className="mt-6 space-y-4 text-sm">
                                     <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> About </a>
+                                        <Link to="https://saranzafar.github.io/" target='_blank' className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> About </Link>
                                     </li>
 
                                     <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Meet the Team </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Accounts Review </a>
+                                        <Link to="https://saranzafar.github.io/" target='_blank' className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Meet the Team </Link>
                                     </li>
                                 </ul>
                             </div>
@@ -204,15 +191,15 @@ function Footer() {
 
                                 <ul className="mt-6 space-y-4 text-sm">
                                     <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Contact </a>
+                                        <Link to="/contact" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Contact </Link>
                                     </li>
 
                                     <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> FAQs </a>
+                                        <Link to="/contact" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> FAQs </Link>
                                     </li>
 
                                     <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Live Chat </a>
+                                        <Link to="tel:03119777995" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Live Chat </Link>
                                     </li>
                                 </ul>
                             </div>
@@ -222,26 +209,22 @@ function Footer() {
 
                                 <ul className="mt-6 space-y-4 text-sm">
                                     <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Accessibility </a>
+                                        <Link to="#" target='_blank' className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Accessibility </Link>
                                     </li>
 
                                     <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Returns Policy </a>
+                                        <Link to="#" target='_blank' className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Code </Link>
                                     </li>
 
                                     <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Refund Policy </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Hiring Statistics </a>
+                                        <Link to="https://saranzafar.github.io/" target='_blank' className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Hiring Statistics </Link>
                                     </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
 
-                    <p className="text-xs text-gray-500">&copy; 2022. Company Name. All rights reserved.</p>
+                    <p className="text-xs text-gray-500">&copy; 2024. Company Name. All rights reserved.</p>
                 </div>
             </footer>
         </div>

@@ -1,30 +1,39 @@
-import React from 'react'
-import { Menu, X, ChevronDown, ChevronRight } from 'lucide-react'
+import React, { useState } from 'react'
+import { Menu, X, ChevronDown, ChevronRight, StoreIcon, HeartIcon } from 'lucide-react'
+import { NavLink } from 'react-router-dom'
 
 const menuItems = [
     {
         name: 'Home',
-        href: '#',
+        to: '/',
     },
     {
-        name: 'About',
-        href: '#',
+        name: 'Shop',
+        to: '/shop',
+        dropdown: [
+            { name: 'Category 1', to: '/category1' },
+            { name: 'Category 2', to: '/category2' },
+            { name: 'Category 3', to: '/category3' },
+        ]
     },
     {
         name: 'Contact',
-        href: '#',
+        to: '/contact',
     },
 ]
 
 function Header() {
-    const [isMenuOpen, setIsMenuOpen] = React.useState(false)
+    const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [checkUserAuthentication, setCheckUserAuthentication] = useState(false)
+    const [cartItems, setCartItems] = useState(3) // Sample cart items count
+    const [wishlistItems, setWishlistItems] = useState(2) // Sample wishlist items count
 
     const toggleMenu = () => {
         setIsMenuOpen(!isMenuOpen)
     }
 
     return (
-        <div className="relative w-full bg-white">
+        <div className="relative w-full bg-white border-b py-4">
             <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:px-8">
                 <div className="inline-flex items-center space-x-2">
                     <span>
@@ -41,38 +50,79 @@ function Header() {
                             />
                         </svg>
                     </span>
-                    <span className="font-bold">DevUI</span>
+                    <span className="font-bold text-2xl">DevUI</span>
                 </div>
-                <div className="hidden grow items-start lg:flex">
-                    <ul className="ml-12 inline-flex space-x-8">
+                <div className="hidden grow items-start lg:flex ">
+                    <ul className="ml-12 inline-flex space-x-6">
                         {menuItems.map((item) => (
-                            <li key={item.name}>
-                                <a
-                                    href={item.href}
-                                    className="inline-flex items-center text-sm font-semibold text-gray-800 hover:text-gray-900"
+                            <li key={item.name} className="relative group transition-all duration-200">
+                                <NavLink
+                                    to={item.to}
+                                    className={({ isActive }) =>
+                                        `inline-flex items-center text-lg font-semibold ${isActive ? 'text-primary' : 'text-gray-800'} hover:text-gray-900`
+                                    }
                                 >
                                     {item.name}
-                                    <span>
-                                        <ChevronDown className="ml-2 h-4 w-4" />
-                                    </span>
-                                </a>
+                                    {item.dropdown && <ChevronDown className="ml-2 h-4 w-4" />}
+                                </NavLink>
+                                {item.dropdown && (
+                                    <ul className="transition duration-200 absolute left-0 hidden w-48 bg-white border border-gray-200 shadow-lg group-hover:block">
+                                        {item.dropdown.map((subItem) => (
+                                            <li key={subItem.name}>
+                                                <NavLink
+                                                    to={subItem.to}
+                                                    className="block px-4 py-2 font-semibold text-sm text-gray-800 hover:bg-gray-100"
+                                                >
+                                                    {subItem.name}
+                                                </NavLink>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                             </li>
                         ))}
                     </ul>
                 </div>
                 <div className="hidden space-x-2 lg:block">
-                    <button
-                        type="button"
-                        className="rounded-md bg-transparent px-3 py-2 text-sm font-semibold text-black hover:bg-black/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                    >
-                        Sign In
-                    </button>
-                    <button
-                        type="button"
-                        className="rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                    >
-                        Log In
-                    </button>
+                    {checkUserAuthentication ? (
+                        <div className=' flex gap-x-4'>
+                            <div className="relative inline-flex">
+                                <NavLink to={"/cart"}>
+                                    <StoreIcon className='hover:text-primary transition duration-100 text-gray-900' size={"30"} />
+                                </NavLink>
+                                {cartItems > 0 && (
+                                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-white text-xs">
+                                        {cartItems}
+                                    </span>
+                                )}
+                            </div>
+                            <div className="relative inline-flex">
+                                <NavLink to={"/wishlist"}>
+                                    <HeartIcon className='hover:text-primary transition duration-100 text-gray-900' size={"30"} />
+                                </NavLink>
+                                {wishlistItems > 0 && (
+                                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-white text-xs">
+                                        {wishlistItems}
+                                    </span>
+                                )}
+                            </div>
+                        </div>
+                    ) : (
+                        <>
+                            <NavLink
+                            to={"signup"}
+                                className="transition duration-200 rounded-md bg-transparent px-3 py-2 text-sm font-semibold text-black hover:bg-black/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                            >
+                                Sign up
+                            </NavLink>
+                            <NavLink
+                                to="login"
+                                className="transition duration-200 rounded-md border border-black px-3 py-2 text-sm font-semibold text-black hover:bg-gray-900 hover:text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                            >
+                                Log In
+                            </NavLink>
+                        </>
+                    )}
                 </div>
                 <div className="lg:hidden">
                     <Menu onClick={toggleMenu} className="h-6 w-6 cursor-pointer" />
@@ -115,7 +165,7 @@ function Header() {
                                         {menuItems.map((item) => (
                                             <a
                                                 key={item.name}
-                                                href={item.href}
+                                                href={item.to}
                                                 className="-m-3 flex items-center rounded-md p-3 text-sm font-semibold hover:bg-gray-50"
                                             >
                                                 <span className="ml-3 text-base font-medium text-gray-900">

@@ -1,6 +1,6 @@
 import React from 'react'
 import { SectionNo1 } from "../components/home/index"
-import { ProductCard, Categories, FAQs } from "../components/index"
+import { ProductCard, Categories, FAQs,Testimonial } from "../components/index"
 
 function Home() {
     return (
@@ -40,8 +40,9 @@ function Home() {
             <div>
                 <h2 className="block text-xl font-bold text-gray-800 sm:text-2xl md:text-4xl lg:text-5xl dark:text-white mb-6 text-center">Build Better Products</h2>
                 <p className="mt-3 text-lg text-gray-800 dark:text-neutral-400 text-center mb-16">Introducing a new way for your brand to reach the creative community.</p>
-                <div className=''>
-                    <FAQs />
+                <div className='grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-10'>
+                    <Testimonial />
+                    <Testimonial />
                 </div>
             </div>
 
