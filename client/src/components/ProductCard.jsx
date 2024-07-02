@@ -1,58 +1,119 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import conf from '../conf/conf';
+import Cookies from 'js-cookie';
+import Success from '../components/alerts/Success';
+import Danger from '../components/alerts/Danger';
+import { PageLoader } from '../components/index';
+import { useDispatch, useSelector } from 'react-redux';
+import { saleProductsReducer } from '../store/ecommerceSlice';
 
 function ProductCard() {
+    const [alertMessage, setAlertMessage] = useState('');
+    const [alertVisibilityS, setAlertVisibilityS] = useState(false);
+    const [alertVisibilityD, setAlertVisibilityD] = useState(false);
+    const [loaderVisibility, setLoaderVisibility] = useState(true);
+    const dispatch = useDispatch();
+    const fetchSaleProducts = useSelector((state) => state.ecommerce?.saleProducts);
+    const saleProducts = fetchSaleProducts[1]?.products?.saleProducts
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            if (fetchSaleProducts && fetchSaleProducts.length > 1) {
+                setLoaderVisibility(false);
+                console.log("Returning");
+                return;
+            }
+
+            try {
+                const response = await axios.get(
+                    `${conf.backendUrl}products/get-sale-products?page=1&limit=8`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${Cookies.get('accessToken')}`,
+                        },
+                    }
+                );
+                dispatch(saleProductsReducer(response.data.message));
+                console.log(response.data.message);
+                setAlertMessage('Products fetched successfully');
+                setAlertVisibilityS(true);
+            } catch (err) {
+                setAlertMessage(err.message);
+                setAlertVisibilityD(true);
+            } finally {
+                setLoaderVisibility(false);
+            }
+        };
+
+        fetchData();
+    }, [dispatch, fetchSaleProducts]);
+
+    if (loaderVisibility) {
+        return <PageLoader />;
+    }
+
+    const truncateDescription = (description, wordLimit) => {
+        const words = description.split(' ');
+        return words.length > wordLimit ? words.slice(0, wordLimit).join(' ') + '...' : description;
+    };
+
     return (
-        <div className="">
-            <div className="rounded-md border hover:shadow-lg hover:-translate-y-2 transition-all duration-200">
-                <img
-                    src="https://images.unsplash.com/photo-1588099768523-f4e6a5679d88?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxjb2xsZWN0aW9uLXBhZ2V8NHwxMTM4MTU1NXx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=800&q=60"
-                    alt="Laptop"
-                    className="aspect-[16/9] w-full rounded-md md:aspect-auto md:h-[300px] lg:h-[200px] opacity-95 hover:opacity-100 duration-200 "
-                />
-                <div className="p-4">
-                    <h1 className="inline-flex items-center text-lg font-semibold">Nike Airmax v2</h1>
-                    <p className="mt-3 text-sm text-gray-600">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Excepturi, debitis?
-                    </p>
-                    <div className="mt-4">
-                        <span className="mb-2 mr-2 inline-block rounded-full bg-gray-100 px-3 py-1 text-[10px] font-semibold text-gray-900">
-                            #Sneakers
-                        </span>
-                        <span className="mb-2 mr-2 inline-block rounded-full bg-gray-100 px-3 py-1 text-[10px] font-semibold text-gray-900">
-                            #Nike
-                        </span>
-                        <span className="mb-2 mr-2 inline-block rounded-full bg-gray-100 px-3 py-1 text-[10px] font-semibold text-gray-900">
-                            #Airmax
-                        </span>
+        <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-3 gap-6'>
+
+            <Success message={alertMessage} alertVisibilityCheck={alertVisibilityS} />
+            <Danger message={alertMessage} alertVisibilityCheck={alertVisibilityD} />
+            {saleProducts && saleProducts.map((product) => (
+                < div className="rounded-md border hover:shadow-lg hover:-translate-y-2 transition-all duration-200" key={saleProducts[0]._id}>
+                    <img
+                        src={product.primaryImage}
+                        alt="Laptop"
+                        className="aspect-[16/9] w-full rounded-md md:aspect-auto md:h-[300px] lg:h-[200px] opacity-95 hover:opacity-100 duration-200 p-4"
+                    />
+                    <div className=' bg-primary rounded inline text-sm text-gray-100 px-1 ml-3'>Sale</div>
+                    <div className="p-4">
+                        <h1 className="inline-flex items-center text-lg font-semibold">{product.name} <small className='bg-gray-900 text-gray-100 px-2 rounded ml-2 pb-1 text-sm'>{product.category.name} </small> </h1>
+
+                        <div className="flex items-center">
+                            {[...Array(5)].map((_, index) => (
+                                <svg
+                                    key={index}
+                                    className={`flex-shrink-0 size-5 ${index < product.rating ? 'text-yellow-400' : 'text-gray-300'} dark:${index < product.rating ? 'text-yellow-600' : 'text-neutral-600'}`}
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    viewBox="0 0 16 16"
+                                >
+                                    <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"></path>
+                                </svg>
+                            ))}
+                        </div>
+
+                        <p className="mt-3 text-sm text-gray-600">
+                            {truncateDescription(product.description, 10)}
+                        </p>
+                        <div className="mt-3 flex items-center space-x-2">
+                            <span className="block text-sm font-semibold">Original Price:</span>
+                            <span className="block text-xs font-medium line-through">{product.price}</span>
+                            <span className="block text-xs font-medium"> {product.sale} </span>
+                        </div>
+                        <div className="mt-3 flex items-center space-x-2">
+                            <span className="block text-sm font-semibold">Quantity:</span>
+                            <span className="block text-xs font-medium">{product.quantity}</span>
+                        </div>
+                        <button
+                            type="button"
+                            className="mt-4 w-full rounded-sm bg-primary px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-supportivePrimary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                        >
+                            Add to Cart
+                        </button>
                     </div>
-                    <div className="mt-3 flex items-center space-x-2">
-                        <span className="block text-sm font-semibold">Colors : </span>
-                        <span className="block h-4 w-4 rounded-full border-2 border-gray-300 bg-red-400"></span>
-                        <span className="block h-4 w-4 rounded-full border-2 border-gray-300 bg-purple-400"></span>
-                        <span className="block h-4 w-4 rounded-full border-2 border-gray-300 bg-orange-400"></span>
-                    </div>
-                    <div className="mt-5 flex items-center space-x-2">
-                        <span className="block text-sm font-semibold">Size : </span>
-                        <span className="block cursor-pointer rounded-md border border-gray-300 p-1 px-2 text-xs font-medium">
-                            8 UK
-                        </span>
-                        <span className="block cursor-pointer rounded-md border border-gray-300 p-1 px-2 text-xs font-medium">
-                            9 UK
-                        </span>
-                        <span className="block cursor-pointer rounded-md border border-gray-300 p-1 px-2 text-xs font-medium">
-                            10 UK
-                        </span>
-                    </div>
-                    <button
-                        type="button"
-                        className="mt-4 w-full rounded-sm bg-primary px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-supportivePrimary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                    >
-                        Add to Cart
-                    </button>
                 </div>
-            </div>
+            ))}
         </div>
     )
 }
 
-export default ProductCard
+export default ProductCard;

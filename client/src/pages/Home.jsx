@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SectionNo1 } from "../components/home/index"
-import { ProductCard, Categories, FAQs,Testimonial } from "../components/index"
+import { ProductCard, Categories, Testimonial } from "../components/index"
 
 function Home() {
+
+
+
     return (
         <div>
             {/* section 1 */}
@@ -12,38 +15,24 @@ function Home() {
             <hr className="border-gray-500 dark:border-white w-4/5 text-center mx-auto my-24" />
             {/* section 2 */}
             <div>
-                <h2 className="block text-xl font-bold text-gray-800 sm:text-2xl md:text-4xl lg:text-5xl dark:text-white mb-6 text-center">Build Better Products</h2>
-                <p className="mt-3 text-lg text-gray-800 dark:text-neutral-400 text-center mb-16">Introducing a new way for your brand to reach the creative community.</p>
-                <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-3 gap-6'>
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                    <ProductCard />
-                </div>
+                <h2 className="block text-xl font-bold text-gray-800 sm:text-2xl md:text-4xl lg:text-5xl dark:text-white mb-6 text-center">Here is Top Deals</h2>
+                <p className="mt-3 text-lg text-gray-800 dark:text-neutral-400 text-center mb-16">Explore our best-sellers with limited-time offers and Find your favorites at unbeatable prices also Shop top-rated items with limited-time savings.</p>
+                <ProductCard />
+
             </div>
             <hr className="border-gray-500 dark:border-white w-4/5 text-center mx-auto my-24" />
             {/* section 3 */}
             <div>
-                <h2 className="block text-xl font-bold text-gray-800 sm:text-2xl md:text-4xl lg:text-5xl dark:text-white mb-6 text-center">Build Better Products</h2>
-                <p className="mt-3 text-lg text-gray-800 dark:text-neutral-400 text-center mb-16">Introducing a new way for your brand to reach the creative community.</p>
-                <div className='grid grid-cols-1 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-3'>
-                    <Categories />
-                    <Categories />
-                    <Categories />
-                    <Categories />
-                    <Categories />
-                    <Categories />
-                </div>
+                <h2 className="block text-xl font-bold text-gray-800 sm:text-2xl md:text-4xl lg:text-5xl dark:text-white mb-6 text-center">Explore Our Categories</h2>
+                <p className="mt-3 text-lg text-gray-800 dark:text-neutral-400 text-center mb-16">Dive into our diverse range of product categories, curated to meet all your needs. From the latest tech gadgets to essential household items, discover quality and variety in every section.</p>
+                <Categories />
             </div>
             <hr className="border-gray-500 dark:border-white w-4/5 text-center mx-auto my-24" />
             {/* section 3 */}
             <div>
-                <h2 className="block text-xl font-bold text-gray-800 sm:text-2xl md:text-4xl lg:text-5xl dark:text-white mb-6 text-center">Build Better Products</h2>
-                <p className="mt-3 text-lg text-gray-800 dark:text-neutral-400 text-center mb-16">Introducing a new way for your brand to reach the creative community.</p>
-                <div className='grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-10'>
-                    <Testimonial />
-                    <Testimonial />
-                </div>
+                <h2 className="block text-xl font-bold text-gray-800 sm:text-2xl md:text-4xl lg:text-5xl dark:text-white mb-6 text-center">What Our Customers Say?</h2>
+                <p className="mt-3 text-lg text-gray-800 dark:text-neutral-400 text-center mb-16">Hear from our satisfied customers who have experienced the quality and excellence of our products and services. Their stories and feedback highlight the value we strive to deliver every day.</p>
+                <Testimonial />
             </div>
 
 

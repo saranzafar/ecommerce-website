@@ -7,32 +7,33 @@ import {
     deleteProduct,
     getSingleProduct,
     addReview,
-    getProductReviews
+    getProductReviews,
+    getAllProducts,
+    getSaleProducts,
 } from "../controllers/product.controller.js";
 
-const router = Router()
-router.use(verifyJwt)
+const router = Router();
+router.use(verifyJwt);
 
-router.route('/add-product')
-    .post(
-        upload.fields([
-            {
-                name: 'primaryImage',
-                maxCount: 1
-            },
-            {
-                name: 'secondaryImages',
-                maxCount: 3
-            },
-        ]),
-        addProduct
-    )
+router.route('/get-all-products').get(getAllProducts);
+
+router.route('/get-sale-products').get(getSaleProducts);
+
+router.route('/add-product').post(
+    upload.fields([
+        { name: 'primaryImage', maxCount: 1 },
+        { name: 'secondaryImages', maxCount: 3 },
+    ]),
+    addProduct
+);
+
 router.route('/:productId')
     .get(getSingleProduct)
     .patch(updateProduct)
     .delete(deleteProduct);
+
 router.route('/review/:productId')
     .patch(addReview)
-    .get(getProductReviews)
+    .get(getProductReviews);
 
-export default router
+export default router;

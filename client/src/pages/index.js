@@ -7,6 +7,7 @@ import Login from "./Login"
 import Signup from "./Signup"
 import Cart from "./Cart"
 import Wishlist from "./Wishlist"
+import Admin from "./Admin"
 import PageNotFound from "./PageNotFound"
 
 export {
@@ -19,5 +20,6 @@ export {
     Signup,
     Cart,
     Wishlist,
+    Admin,
     PageNotFound,
 }

@@ -56,7 +56,7 @@ const productSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: "Category"
     },
-    reviews: [reviewSchema]  // Embedding reviews as subdocuments
+    reviews: [reviewSchema] || 5
 }, { timestamps: true });
 
 productSchema.plugin(mongooseAggregatePaginate);

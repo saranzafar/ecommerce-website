@@ -99,7 +99,7 @@ function ContactUs() {
                         <img
                             alt="Contact us"
                             className="hidden max-h-full w-full rounded-lg object-cover lg:block"
-                            src="public/imgs/contact.png"
+                            src="/imgs/contact.png"
                         />
                     </div>
                     <hr className="border-gray-500 dark:border-white w-4/5 text-center mx-auto my-24" />

@@ -59,7 +59,6 @@ const addProduct = asyncHandler(async (req, res) => {
 const updateProduct = asyncHandler(async (req, res) => {
     const { productId } = req.params;
     const { name, description, price, sale, quantity } = req.body;
-    console.log(productId);
     // Find the product by ID
     const product = await Product.findById(productId);
     if (!product) {
@@ -93,6 +92,45 @@ const getSingleProduct = asyncHandler(async (req, res) => {
         new apiResponse(200, product, "Product Fetched successfully")
     );
 })
+
+const getAllProducts = asyncHandler(async (req, res) => {
+    const { page = 1, limit = 10 } = req.query; // Default values for pagination
+
+    const skip = (page - 1) * limit;
+    const products = await Product.find().skip(skip).limit(Number(limit));
+    const totalProducts = await Product.countDocuments();
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    if (products.length === 0) {
+        throw new apiError(404, "No products found");
+    }
+
+    return res.status(200).json(
+        new apiResponse(200, { products, totalPages, currentPage: Number(page) }, "Products fetched successfully")
+    );
+})
+
+const getSaleProducts = asyncHandler(async (req, res) => {
+    const { page = 1, limit = 10 } = req.query; // Default values for pagination
+    const skip = (page - 1) * limit;
+    
+    // Populate the 'category' field with only 'name' and '_id'
+    const saleProducts = await Product.find({ sale: { $exists: true, $ne: "" } })
+        .skip(skip)
+        .limit(Number(limit))
+        .populate({ path: 'category', select: 'name _id' }); // Populate specific fields
+
+    const totalSaleProducts = await Product.countDocuments({ sale: { $exists: true, $ne: "" } });
+    const totalPages = Math.ceil(totalSaleProducts / limit);
+
+    if (saleProducts.length === 0) {
+        throw new apiError(404, "No sale products found");
+    }
+
+    return res.status(200).json(
+        new apiResponse(200, { saleProducts, totalPages, currentPage: Number(page) }, "Sale products fetched")
+    );
+});
 
 const deleteProduct = asyncHandler(async (req, res) => {
     const { productId } = req.params; // Assuming the product ID is passed as a URL parameter
@@ -173,4 +211,6 @@ export {
     getSingleProduct,
     addReview,
     getProductReviews,
+    getAllProducts,
+    getSaleProducts,
 }

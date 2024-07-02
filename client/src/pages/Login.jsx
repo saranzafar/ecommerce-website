@@ -1,11 +1,53 @@
 import React from 'react'
-import { ArrowRight } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { ArrowRight, CircleDashed } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from 'axios'
+import conf from "../conf/conf.js"
+import { useState } from 'react'
+import Success from '../components/alerts/Success.jsx'
+import Danger from '../components/alerts/Danger.jsx'
+import Cookies from 'js-cookie';
 
 
 export default function Login() {
+    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [buttonLoading, setButtonLoading] = useState(false)
+    const [alertMessage, setAlertMessage] = useState("")
+    const [alertVisibilityS, setAlertVisibilityS] = useState(false)
+    const [alertVisibilityD, setAlertVisibilityD] = useState(false)
+    const navigate = useNavigate()
+
+    const handleChange = (field, value) => {
+        setFormData({ ...formData, [field]: value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setFormData({ email: '', password: '' });
+
+        setButtonLoading(true)
+        try {
+            const response = await axios.post(`${conf.backendUrl}users/login`, formData);
+            const { user, accessToken } = response.data.message;
+
+            Cookies.set('user', JSON.stringify(user), { expires: 7, secure: true, sameSite: 'strict' });
+            Cookies.set('accessToken', accessToken, { expires: 7, secure: true, sameSite: 'strict' });
+
+            setAlertVisibilityS(true);
+            setAlertMessage("Login successful");
+            navigate("/"); // Uncomment this line if you want to redirect
+        } catch (err) {
+            setAlertVisibilityD(true);
+            setAlertMessage(err.message);
+        } finally {
+            setButtonLoading(false);
+        }
+    };
+
     return (
         <section>
+            <Success message={alertMessage} alertVisibilityCheck={alertVisibilityS} />
+            <Danger message={alertMessage} alertVisibilityCheck={alertVisibilityD} />
             <div className="lg:grid lg:grid-cols-2 md:grid md:grid-cols-2 flex flex-wrap-reverse justify-center items-center">
                 <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
                     <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">
@@ -20,10 +62,10 @@ export default function Login() {
                                 Create a free account
                             </Link>
                         </p>
-                        <form action="#" method="POST" className="mt-8">
+                        <form onSubmit={handleSubmit} className="mt-8">
                             <div className="space-y-5">
                                 <div>
-                                    <label htmlFor="" className="text-base font-medium text-gray-900">
+                                    <label htmlFor="email" className="text-base font-medium text-gray-900">
                                         {' '}
                                         Email address{' '}
                                     </label>
@@ -32,6 +74,10 @@ export default function Login() {
                                             className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
                                             type="email"
                                             placeholder="Email"
+                                            id="email"
+                                            required
+                                            value={formData.email}
+                                            onChange={(value) => handleChange('email', value.target.value)}
                                         ></input>
                                     </div>
                                 </div>
@@ -50,21 +96,37 @@ export default function Login() {
                                             Forgot password?{' '}
                                         </Link>
                                     </div>
-                                    <div className="mt-2">
-                                        <input
-                                            className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
-                                            type="password"
-                                            placeholder="Password"
-                                        ></input>
+                                    <div>
+                                        <div className="mt-2">
+                                            <input
+                                                className="flex h-10 w-full rounded-md border border-gray-300 bg-transparent px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                                type="password"
+                                                placeholder="Password"
+                                                id="password"
+                                                required
+                                                value={formData.password}
+                                                onChange={(value) => handleChange('password', value.target.value)}
+                                            ></input>
+                                        </div>
                                     </div>
                                 </div>
                                 <div>
-                                    <button
-                                        type="button"
-                                        className="inline-flex w-full items-center justify-center rounded-md bg-primary px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-supportivePrimary"
-                                    >
-                                        Get started <ArrowRight className="ml-2" size={16} />
-                                    </button>
+                                    {
+                                        buttonLoading ? (
+                                            <div
+                                                className="inline-flex w-full items-center justify-center rounded-md bg-primary px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-supportivePrimary"
+                                            >
+                                                <span className='animate-spin'><CircleDashed /></span>
+                                            </div>
+                                        ) : (
+                                            <button
+                                                type="submit"
+                                                className="inline-flex w-full items-center justify-center rounded-md bg-primary px-3.5 py-2.5 font-semibold leading-7 text-white hover:bg-supportivePrimary"
+                                            >
+                                                Get Start <ArrowRight className="ml-2" size={16} />
+                                            </button>
+                                        )
+                                    }
                                 </div>
                             </div>
                         </form>
@@ -107,7 +169,7 @@ export default function Login() {
                 <div className="h-full w-full">
                     <img
                         className="h-full w-full rounded-md pb-8 object-bottom lg:w-full lg:object-contain md:w-full md:object-contain sm:w-1/2 sm:mx-auto"
-                        src="public/imgs/login.png"
+                        src="/imgs/login.png"
                         alt=""
                     />
                 </div>

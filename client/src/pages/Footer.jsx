@@ -55,8 +55,7 @@ function Footer() {
                             </div>
 
                             <p className="mt-4 max-w-xs text-gray-500">
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Esse non cupiditate quae nam
-                                molestias.
+                                Shop the best deals and quality products with us. Enjoy fast shipping, secure payments, and top-notch customer service. Stay connected for exclusive offers!
                             </p>
 
                             <ul className="mt-8 flex gap-6">

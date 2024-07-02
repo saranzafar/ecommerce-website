@@ -6,13 +6,15 @@ import {
     fetchAllCategories,
     addProductToCategory,
     removeProductFromCategory,
-    getAllProductsInCategory
+    getAllProductsInCategory,
+    getCategoryById
 } from "../controllers/categories.controller.js";
 
 const router = Router();
 
 router.use(verifyJwt); // Apply JWT verification to all routes
 
+router.route("/get-single-category/:categoryId").get(getCategoryById)
 router.route('/category')
     .post(addCategory)
     .get(fetchAllCategories);

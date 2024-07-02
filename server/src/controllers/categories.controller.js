@@ -155,6 +155,18 @@ const getAllProductsInCategory = asyncHandler(async (req, res) => {
     }
 });
 
+const getCategoryById = asyncHandler(async (req, res) => {
+    const { categoryId } = req.params;
+    // const category = await Category.findById(categoryId).populate('products');
+    const category = await Category.findById(categoryId)
+    if (category) {
+        return res.status(200).json({ status: 200, message: "Category Fetched", category });
+    }
+    else {
+        return res.status(404).json({ status: 404, message: "Category not found", });
+    }
+})
+
 
 export {
     addCategory,
@@ -163,4 +175,5 @@ export {
     removeProductFromCategory,
     fetchAllCategories,
     getAllProductsInCategory,
+    getCategoryById,
 };
