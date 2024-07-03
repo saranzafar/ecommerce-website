@@ -1,11 +1,11 @@
 import { Wishlist } from "../models/wishlist.model.js";
 import { apiError } from "../utils/apiError.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { apiResponse } from "../utils/apiResponse.js"; // Assuming you have this utility
+import { apiResponse } from "../utils/apiResponse.js";
 
-const addProductToWishlist = asyncHandler(async (req, res) => {
+const toggleWishlist = asyncHandler(async (req, res) => {
     const { productId } = req.body;
-    const userId = req.user.id; // Assuming user ID is available from authenticated user
+    const userId = req.user.id;
 
     if (!productId) {
         throw new apiError(401, "Product ID is required");
@@ -15,44 +15,26 @@ const addProductToWishlist = asyncHandler(async (req, res) => {
 
     if (!wishlist) {
         wishlist = await Wishlist.create({ user: userId, products: [productId] });
-    } else {
-        if (wishlist.products.includes(productId)) {
-            return res.status(200).json(
-                new apiResponse(200, "Product already in wishlist", wishlist)
-            );
-        }
+        return res.status(200).json(
+            new apiResponse(200, "Product added to wishlist successfully", wishlist)
+        );
+    }
+
+    const productIndex = wishlist.products.indexOf(productId);
+
+    if (productIndex === -1) {
         wishlist.products.push(productId);
         await wishlist.save();
+        return res.status(200).json(
+            new apiResponse(200, "Product added to wishlist successfully", wishlist)
+        );
+    } else {
+        wishlist.products.splice(productIndex, 1);
+        await wishlist.save();
+        return res.status(203).json(
+            new apiResponse(203, "Product removed from wishlist successfully", wishlist)
+        );
     }
-
-    return res.status(200).json(
-        new apiResponse(200, "Product added to wishlist successfully", wishlist)
-    );
 });
 
-const removeProductFromWishlist = asyncHandler(async (req, res) => {
-    const { productId } = req.params;
-    const userId = req.user.id; // Assuming user ID is available from authenticated user
-
-    if (!productId) {
-        throw new apiError(401, "Product ID is required");
-    }
-
-    const wishlist = await Wishlist.findOne({ user: userId });
-
-    if (!wishlist || !wishlist.products.includes(productId)) {
-        throw new apiError(404, "Product not found in wishlist");
-    }
-
-    wishlist.products = wishlist.products.filter(p => p.toString() !== productId);
-    await wishlist.save();
-
-    return res.status(200).json(
-        new apiResponse(200, "Product removed from wishlist successfully", wishlist)
-    );
-});
-
-export {
-    addProductToWishlist,
-    removeProductFromWishlist
-};
+export { toggleWishlist };

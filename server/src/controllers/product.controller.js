@@ -4,6 +4,7 @@ import { apiError } from "../utils/apiError.js"
 import { Product } from "../models/product.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { v2 as cloudinary } from "cloudinary";
+import { Category } from "../models/categorie.model.js"
 
 
 const addProduct = asyncHandler(async (req, res) => {
@@ -83,7 +84,7 @@ const updateProduct = asyncHandler(async (req, res) => {
 const getSingleProduct = asyncHandler(async (req, res) => {
     const { productId } = req.params
 
-    const product = await Product.findById(productId);
+    const product = await Product.findById(productId).populate("category");
     if (!product) {
         throw new apiError(404, "Product not found");
     }
@@ -113,7 +114,7 @@ const getAllProducts = asyncHandler(async (req, res) => {
 const getSaleProducts = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10 } = req.query; // Default values for pagination
     const skip = (page - 1) * limit;
-    
+
     // Populate the 'category' field with only 'name' and '_id'
     const saleProducts = await Product.find({ sale: { $exists: true, $ne: "" } })
         .skip(skip)
@@ -166,6 +167,8 @@ const addReview = asyncHandler(async (req, res) => {
     const { productId } = req.params;
     const { text, rating } = req.body;
 
+    console.log(productId, text, rating);
+
     if (!text || !rating) {
         throw new apiError(400, "Review text and rating are required");
     }
@@ -189,7 +192,7 @@ const addReview = asyncHandler(async (req, res) => {
     product.reviews.push(review);
     const savedReview = await product.save();
 
-    return res.status(201).json(new apiResponse(201, savedReview, "Review added successfully"));
+    return res.status(201).json(new apiResponse(201, {}, "Review added successfully"));
 });
 
 const getProductReviews = asyncHandler(async (req, res) => {
