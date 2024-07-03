@@ -9,6 +9,7 @@ import Cart from "./Cart"
 import Wishlist from "./Wishlist"
 import Admin from "./Admin"
 import PageNotFound from "./PageNotFound"
+import SingleProduct from "./SingleProduct"
 
 export {
     Home,
@@ -22,4 +23,5 @@ export {
     Wishlist,
     Admin,
     PageNotFound,
+    SingleProduct,
 }

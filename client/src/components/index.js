@@ -4,6 +4,7 @@ import FAQs from "./FAQs";
 import Testimonial from "./Testimonial";
 import AuthLayout from "./auth/AuthLayout";
 import PageLoader from "./PageLoader";
+import AllProducts from "./AllProducts"
 
 export {
     ProductCard,
@@ -12,4 +13,5 @@ export {
     Testimonial,
     AuthLayout,
     PageLoader,
+    AllProducts,
 }

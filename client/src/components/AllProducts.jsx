@@ -6,8 +6,7 @@ import Success from '../components/alerts/Success';
 import Danger from '../components/alerts/Danger';
 import { PageLoader } from '../components/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { saleProductsReducer } from '../store/ecommerceSlice';
-import { Link } from 'react-router-dom';
+import { allProductsReducer } from '../store/ecommerceSlice';
 
 function ProductCard() {
     const [alertMessage, setAlertMessage] = useState('');
@@ -15,27 +14,26 @@ function ProductCard() {
     const [alertVisibilityD, setAlertVisibilityD] = useState(false);
     const [loaderVisibility, setLoaderVisibility] = useState(true);
     const dispatch = useDispatch();
-    const fetchSaleProducts = useSelector((state) => state.ecommerce?.saleProducts);
-    const saleProducts = fetchSaleProducts[1]?.products?.saleProducts
-
+    const fetchAllProducts = useSelector((state) => state.ecommerce?.allProducts);
+    const allProducts = fetchAllProducts[0]?.products?.products || [];
 
     useEffect(() => {
         const fetchData = async () => {
-            if (fetchSaleProducts && fetchSaleProducts.length > 1) {
+            if (fetchAllProducts && fetchAllProducts.length > 1) {
                 setLoaderVisibility(false);
                 return;
             }
 
             try {
                 const response = await axios.get(
-                    `${conf.backendUrl}products/get-sale-products?page=1&limit=8`,
+                    `${conf.backendUrl}products/get-all-products?page=1&limit=30`,
                     {
                         headers: {
                             Authorization: `Bearer ${Cookies.get('accessToken')}`,
                         },
                     }
                 );
-                dispatch(saleProductsReducer(response.data.message));
+                dispatch(allProductsReducer(response.data.message));
                 setAlertMessage('Products fetched successfully');
                 setAlertVisibilityS(true);
             } catch (err) {
@@ -47,7 +45,7 @@ function ProductCard() {
         };
 
         fetchData();
-    }, [dispatch, fetchSaleProducts]);
+    }, [dispatch, fetchAllProducts]);
 
     if (loaderVisibility) {
         return <PageLoader />;
@@ -60,22 +58,23 @@ function ProductCard() {
 
     return (
         <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-3 gap-6'>
-
             <Success message={alertMessage} alertVisibilityCheck={alertVisibilityS} />
             <Danger message={alertMessage} alertVisibilityCheck={alertVisibilityD} />
-            {saleProducts && saleProducts.map((product) => (
-                < div className="rounded-md border hover:shadow-lg hover:-translate-y-2 transition-all duration-200" key={saleProducts[0]._id}>
-                    <Link to={`/product/${saleProducts[0]._id}`}>
-                        <img
-                            src={product.primaryImage}
-                            alt="Laptop"
-                            className=" aspect-square w-full rounded-md md:aspect-auto md:h-[300px] lg:h-[200px] opacity-95 hover:opacity-100 duration-200 p-4 object-cover"
-                        />
-                    </Link>
-
-                    <div className=' bg-primary rounded inline text-sm text-gray-100 px-1 ml-3'>Sale</div>
+            {allProducts.map((product) => (
+                <div className="rounded-md border hover:shadow-lg hover:-translate-y-2 transition-all duration-200" key={product._id}>
+                    <img
+                        src={product.primaryImage}
+                        alt={product.name}
+                        className="aspect-auto w-full rounded-md md:aspect-auto md:h-[200px] lg:h-[200px] opacity-95 hover:opacity-100 duration-300 p-4 h-[200px] object-cover hover:scale-105"
+                    />
+                    {/* <div className='bg-primary rounded inline text-sm text-gray-100 px-1 ml-3'>Sale</div> */}
                     <div className="p-4">
-                        <h1 className="inline-flex items-center text-lg font-semibold">{product.name} <small className='bg-gray-900 text-gray-100 px-2 rounded ml-2 pb-1 text-sm'>{product.category.name} </small> </h1>
+                        <h1 className="inline-flex items-center text-lg font-semibold">
+                            {product.name}
+                            <small className='bg-gray-900 text-gray-100 px-2 rounded ml-2 pb-1 text-sm'>
+                                {product.category.name}
+                            </small>
+                        </h1>
 
                         <div className="flex items-center">
                             {[...Array(5)].map((_, index) => (
@@ -94,12 +93,12 @@ function ProductCard() {
                         </div>
 
                         <p className="mt-3 text-sm text-gray-600">
-                            {truncateDescription(product.description, 10)}
+                            {truncateDescription(product.description, 8)}
                         </p>
                         <div className="mt-3 flex items-center space-x-2">
                             <span className="block text-sm font-semibold">Original Price:</span>
                             <span className="block text-xs font-medium line-through">{product.price}</span>
-                            <span className="block text-xs font-medium"> {product.sale} </span>
+                            {product.sale && <span className="block text-xs font-medium"> {product.sale} </span>}
                         </div>
                         <div className="mt-3 flex items-center space-x-2">
                             <span className="block text-sm font-semibold">Quantity:</span>

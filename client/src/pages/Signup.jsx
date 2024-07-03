@@ -30,7 +30,6 @@ export default function Signup() {
         await axios.post(`${conf.backendUrl}users/register`, formData)
             .then((response) => {
                 setAlertVisibilityS(true)
-                console.log(response.data);
                 setAlertMessage(response.data.message)
                 navigate("/login") //redirection
                 setButtonLoading(false)

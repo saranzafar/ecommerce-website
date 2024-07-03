@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     saleProducts: [{}],
     categories: [],
+    allProducts: [],
 }
 
 const saleProductsSlice = createSlice({
@@ -23,6 +24,13 @@ const saleProductsSlice = createSlice({
 
             state.categories.push(data)
         },
+        allProductsReducer: (state, action) => {
+            const data = {
+                products: action.payload,
+            }
+
+            state.allProducts.push(data)
+        },
         // logout: (state) => {
         //     state.userData.push(null)
 
@@ -30,5 +38,5 @@ const saleProductsSlice = createSlice({
     }
 })
 
-export const { saleProductsReducer, categoryReducer } = saleProductsSlice.actions
+export const { saleProductsReducer, categoryReducer, allProductsReducer } = saleProductsSlice.actions
 export default saleProductsSlice.reducer
