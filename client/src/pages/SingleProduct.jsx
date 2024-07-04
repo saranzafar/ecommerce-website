@@ -5,9 +5,9 @@ import axios from 'axios';
 import conf from '../conf/conf';
 import Cookies from 'js-cookie';
 import { StarIcon, UserCircle2Icon, Loader2Icon } from "lucide-react";
-import Success from '../components/alerts/Success';
-import Danger from '../components/alerts/Danger';
 import { PageLoader } from '../components/index';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function SingleProductPage() {
     const { id } = useParams();
@@ -15,28 +15,23 @@ function SingleProductPage() {
     const [submitReviewStatus, setSubmitReviewStatus] = useState(false);
     const [otherProducts, setOtherProducts] = useState([]);
     const [newReview, setNewReview] = useState({ rating: '', text: '' });
-    const allProducts = useSelector(state => state.products?.allProducts);
-    const saleProducts = useSelector(state => state.products?.saleProducts);
-    const [alertMessage, setAlertMessage] = useState('');
-    const [alertVisibilityS, setAlertVisibilityS] = useState(false);
-    const [alertVisibilityD, setAlertVisibilityD] = useState(false);
-    const [checkWishlist, setSheckWishlist] = useState();
+    const allProducts = useSelector(state => state.ecommerce?.allProducts);
+    const saleProducts = useSelector(state => state.ecommerce?.saleProducts);
+    const [checkWishlist, setCheckWishlist] = useState();
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        let foundProduct = allProducts?.find(p => p.id === id) || saleProducts?.find(p => p.id === id);
+        let foundProduct = allProducts?.products.find(p => p._id === id) || saleProducts?.saleProducts.find(p => p._id === id) || [];
         if (foundProduct) {
             setProduct(foundProduct);
-            setOtherProducts(allProducts ? allProducts.filter(p => p.category.name === foundProduct.category.name && p.id !== foundProduct.id).slice(0, 3) : []);
+            // setOtherProducts(allProducts ? allProducts.filter(p => p.category.name === foundProduct.category.name && p.id !== foundProduct.id).slice(0, 3) : []);
         } else {
-            axios.get(`${conf.backendUrl}products/${id}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${Cookies.get('accessToken')}`,
-                    },
-                }
-            )
+            axios.get(`${conf.backendUrl}products/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('accessToken')}`,
+                },
+            })
                 .then(response => {
                     setProduct({
                         ...response.data.message,
@@ -57,7 +52,7 @@ function SingleProductPage() {
     };
 
     const handleReviewSubmit = async () => {
-        setSubmitReviewStatus(true)
+        setSubmitReviewStatus(true);
         await axios.patch(`${conf.backendUrl}products/review/${id}`, newReview, {
             headers: {
                 Authorization: `Bearer ${Cookies.get('accessToken')}`,
@@ -65,17 +60,18 @@ function SingleProductPage() {
         })
             .then(response => {
                 setNewReview({ rating: '', text: '' });
-                setAlertMessage('Review Added');
-                setAlertVisibilityS(true);
-                setSubmitReviewStatus(false)
-
+                // setAlertMessage('Review Added');
+                // setAlertVisibilityS(true);
+                toast.success('Review Added');
+                setSubmitReviewStatus(false);
             })
             .catch((error) => {
-                console.error('Error submitting review:', error)
-                setAlertMessage('An Error Occure');
-                setAlertVisibilityD(true)
-                setSubmitReviewStatus(false)
-            })
+                console.error('Error submitting review:', error);
+                // setAlertMessage('An Error Occured');
+                // setAlertVisibilityD(true);
+                toast.error('An Error Occured');
+                setSubmitReviewStatus(false);
+            });
     };
 
     const toggleWishlist = async () => {
@@ -85,27 +81,28 @@ function SingleProductPage() {
             },
         })
             .then(response => {
-                console.log("added to wishlist", response.data);
-                if (response.data.statuscode == 200) {
-                    setAlertMessage('Added to Wishlist');
-                    setAlertVisibilityS(true);
+                if (response.data.statuscode === 200) {
+                    // setAlertMessage('Added to Wishlist');
+                    // setAlertVisibilityS(true);
+                    toast.success('Added to Wishlist');
+                } else if (response.data.statuscode === 203) {
+                    // setAlertMessage('Removed From Wishlist');
+                    // setAlertVisibilityS(true);
+                    toast.info('Removed From Wishlist');
                 }
-                else if (response.data.statuscode == 203) {
-                    setAlertMessage('Removed From Wishlist');
-                    setAlertVisibilityS(true);
-                }
-                setTimeout(() => {
-                    setAlertVisibilityS(false);
-                }, 5000);
+                // setTimeout(() => {
+                //     setAlertVisibilityS(false);
+                // }, 5000);
             })
             .catch((error) => {
-                console.error('Error submitting review:', error)
-                setAlertMessage('Removed from Wishlist');
-                setAlertVisibilityD(true)
-                setTimeout(() => {
-                    setAlertVisibilityS(false);
-                }, 5000);
-            })
+                console.error('Error submitting review:', error);
+                // setAlertMessage('Removed from Wishlist');
+                // setAlertVisibilityD(true);
+                toast.error('Error handling wishlist action');
+                // setTimeout(() => {
+                //     setAlertVisibilityS(false);
+                // }, 5000);
+            });
     };
 
     if (!product) {
@@ -118,13 +115,14 @@ function SingleProductPage() {
 
     return (
         <div className="font-sans bg-white" key={product._id}>
-            <Success message={alertMessage} alertVisibilityCheck={alertVisibilityS} />
-            <Danger message={alertMessage} alertVisibilityCheck={alertVisibilityD} />
+            {/* <Success message={alertMessage} alertVisibilityCheck={alertVisibilityS} /> */}
+            {/* <Danger message={alertMessage} alertVisibilityCheck={alertVisibilityD} /> */}
+            <ToastContainer />
             <div className="p-4 lg:max-w-7xl max-w-4xl mx-auto">
                 <div className="grid items-start grid-cols-1 lg:grid-cols-5 gap-12 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] p-6 rounded-lg">
                     <div className="lg:col-span-3 w-full lg:sticky top-0 text-center">
                         <div className="px-4 py-10 rounded-lg shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] relative">
-                            <img src={`${product.primaryImage}`} alt="Product" className=" w-3/6 rounded object-cover mx-auto" />
+                            <img src={`${product.primaryImage}`} alt="Product" className="w-3/6 rounded object-cover mx-auto" />
                             <button type="button" className="absolute top-4 right-4" onClick={toggleWishlist}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20px" fill="#ccc" className="mr-1 hover:fill-[#333]" viewBox="0 0 64 64">
                                     <path d="M45.5 4A18.53 18.53 0 0 0 32 9.86 18.5 18.5 0 0 0 0 22.5C0 40.92 29.71 59 31 59.71a2 2 0 0 0 2.06 0C34.29 59 64 40.92 64 22.5A18.52 18.52 0 0 0 45.5 4ZM32 55.64C26.83 52.34 4 36.92 4 22.5a14.5 14.5 0 0 1 26.36-8.33 2 2 0 0 0 3.27 0A14.5 14.5 0 0 1 60 22.5c0 14.41-22.83 29.83-28 33.14Z" data-original="#000000"></path>
@@ -167,7 +165,7 @@ function SingleProductPage() {
                                     </p>
                                 </div>
                             ) : (
-                                <h1>Not sale</h1>
+                                <h1>Not on sale</h1>
                             )}
                         </div>
                         <div className="mt-8 flex items-baseline">
@@ -237,9 +235,7 @@ function SingleProductPage() {
                         </div>
                         {
                             submitReviewStatus ? (
-                                <div
-                                    className="mt-4 py-2 bg-primary text-white rounded hover:bg-supportivePrimary inline-block px-12"
-                                >
+                                <div className="mt-4 py-2 bg-primary text-white rounded hover:bg-supportivePrimary inline-block px-12">
                                     <Loader2Icon className='animate-spin' />
                                 </div>
                             ) : (
@@ -252,7 +248,6 @@ function SingleProductPage() {
                                 </button>
                             )
                         }
-
                     </div>
                 </div>
             </div>

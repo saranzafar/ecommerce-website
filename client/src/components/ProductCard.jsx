@@ -6,8 +6,11 @@ import Success from '../components/alerts/Success';
 import Danger from '../components/alerts/Danger';
 import { PageLoader } from '../components/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { saleProductsReducer } from '../store/ecommerceSlice';
+import { ShoppingCartIcon } from "lucide-react"
+import { saleProductsReducer, addToCartReducer } from '../store/ecommerceSlice';
 import { Link } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function ProductCard() {
     const [alertMessage, setAlertMessage] = useState('');
@@ -16,12 +19,11 @@ function ProductCard() {
     const [loaderVisibility, setLoaderVisibility] = useState(true);
     const dispatch = useDispatch();
     const fetchSaleProducts = useSelector((state) => state.ecommerce?.saleProducts);
-    const saleProducts = fetchSaleProducts[1]?.products?.saleProducts
-
+    const saleProducts = fetchSaleProducts.saleProducts
 
     useEffect(() => {
         const fetchData = async () => {
-            if (fetchSaleProducts && fetchSaleProducts.length > 1) {
+            if (fetchSaleProducts && saleProducts?.length > 1) {
                 setLoaderVisibility(false);
                 return;
             }
@@ -47,7 +49,7 @@ function ProductCard() {
         };
 
         fetchData();
-    }, [dispatch, fetchSaleProducts]);
+    }, [dispatch, fetchSaleProducts, saleProducts?.length]);
 
     if (loaderVisibility) {
         return <PageLoader />;
@@ -58,22 +60,43 @@ function ProductCard() {
         return words.length > wordLimit ? words.slice(0, wordLimit).join(' ') + '...' : description;
     };
 
+    const handleAddToCart = (product) => {
+        toast.success('Product added to cart!', {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+
+        const productData = {
+            _id: product._id,
+            primaryImage: product.primaryImage,
+            price: product.sale ? product.sale : product.price,
+            name: product.name,
+            quantity: 1, // Default quantity to 1
+        };
+        dispatch(addToCartReducer(productData));
+    };
+
     return (
         <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-3 gap-6'>
-
             <Success message={alertMessage} alertVisibilityCheck={alertVisibilityS} />
             <Danger message={alertMessage} alertVisibilityCheck={alertVisibilityD} />
-            {saleProducts && saleProducts.map((product) => (
-                < div className="rounded-md border hover:shadow-lg hover:-translate-y-2 transition-all duration-200" key={saleProducts[0]._id}>
-                    <Link to={`/product/${saleProducts[0]._id}`}>
+            {saleProducts && saleProducts.map((product, index) => (
+                <div className="rounded-md border hover:shadow-lg hover:-translate-y-2 transition-all duration-200" key={saleProducts[index]._id}>
+
+                    <Link to={`/product/${product._id}`}>
                         <img
                             src={product.primaryImage}
                             alt="Laptop"
-                            className=" aspect-square w-full rounded-md md:aspect-auto md:h-[300px] lg:h-[200px] opacity-95 hover:opacity-100 duration-200 p-4 object-cover"
+                            className="aspect-square w-full rounded-md md:aspect-auto md:h-[300px] lg:h-[200px] opacity-95 hover:opacity-100 duration-200 p-4 object-cover"
                         />
                     </Link>
 
-                    <div className=' bg-primary rounded inline text-sm text-gray-100 px-1 ml-3'>Sale</div>
+                    <div className='bg-primary rounded inline text-sm text-gray-100 px-1 ml-3'>Sale</div>
                     <div className="p-4">
                         <h1 className="inline-flex items-center text-lg font-semibold">{product.name} <small className='bg-gray-900 text-gray-100 px-2 rounded ml-2 pb-1 text-sm'>{product.category.name} </small> </h1>
 
@@ -107,13 +130,18 @@ function ProductCard() {
                         </div>
                         <button
                             type="button"
-                            className="mt-4 w-full rounded-sm bg-primary px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-supportivePrimary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                            onClick={() => handleAddToCart(product)}
+                            className={`mt-4 w-full rounded-sm bg-primary px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-supportivePrimary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black`}
                         >
-                            Add to Cart
+                            <div className='flex flex-row p-0 m-0 items-center justify-center'>
+                                <ShoppingCartIcon />
+                                <div>Add To Cart</div>
+                            </div>
                         </button>
                     </div>
                 </div>
             ))}
+            <ToastContainer />
         </div>
     )
 }

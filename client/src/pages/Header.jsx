@@ -1,9 +1,19 @@
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import {
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuItems
+} from '@headlessui/react';
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { NavLink } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
-import { ChevronDown, StoreIcon, HeartIcon } from 'lucide-react';
+import { ChevronDown, StoreIcon, HeartIcon, BellIcon } from 'lucide-react';
+import { Cart } from '../pages/index';
+import { useDispatch, useSelector } from 'react-redux';
 
 const menuItems = [
     {
@@ -27,8 +37,11 @@ function classNames(...classes) {
 export default function Header() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [checkUserAuthentication, setCheckUserAuthentication] = useState(false);
-    const [cartItems, setCartItems] = useState(3); // Sample cart items count
-    const [wishlistItems, setWishlistItems] = useState(2); // Sample wishlist items count
+    const [cartVisibility, setCartVisibility] = useState(false);
+
+    const cartItems = useSelector((state) => state.ecommerce?.cartProducts?.length);
+    const wishlistItems = useSelector((state) => state.ecommerce?._wishlistItems?.length);
+
 
     useEffect(() => {
         const userCookie = Cookies.get('user');
@@ -39,12 +52,17 @@ export default function Header() {
         }
     }, []);
 
+    const handleCartClick = () => {
+        setCartVisibility(!cartVisibility);
+    };
+
     return (
         <Disclosure as="nav" className="bg-white border-b">
             {({ open }) => (
                 <>
                     <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
                         <div className="relative flex h-16 items-center justify-between">
+                            {cartVisibility ? <Cart /> : null}
                             <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                                 <DisclosureButton className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-800">
                                     <span className="sr-only">Open main menu</span>
@@ -96,9 +114,11 @@ export default function Header() {
                                 {checkUserAuthentication ? (
                                     <div className="flex space-x-4">
                                         <div className="relative">
-                                            <NavLink to="/cart">
-                                                <StoreIcon className="hover:text-primary transition duration-100 text-gray-900" size={26} />
-                                            </NavLink>
+                                            <StoreIcon
+                                                onClick={handleCartClick}
+                                                className="hover:text-primary transition duration-100 text-gray-900"
+                                                size={26}
+                                            />
                                             {cartItems > 0 && (
                                                 <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-white text-xs">
                                                     {cartItems}
@@ -107,7 +127,10 @@ export default function Header() {
                                         </div>
                                         <div className="relative">
                                             <NavLink to="/wishlist">
-                                                <HeartIcon className="hover:text-primary transition duration-100 text-gray-900" size={26} />
+                                                <HeartIcon
+                                                    className="hover:text-primary transition duration-100 text-gray-900"
+                                                    size={26}
+                                                />
                                             </NavLink>
                                             {wishlistItems > 0 && (
                                                 <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-white text-xs">
@@ -116,6 +139,10 @@ export default function Header() {
                                             )}
                                         </div>
                                         <Menu as="div" className="relative ml-3">
+                                            <MenuButton>
+                                                <span className="sr-only">Open user menu</span>
+                                                <BellIcon className="h-6 w-6 text-gray-800" />
+                                            </MenuButton>
                                             <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                                 <MenuItem>
                                                     {({ active }) => (
