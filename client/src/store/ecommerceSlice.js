@@ -4,6 +4,7 @@ const initialState = {
     saleProducts: [{}],
     categories: [],
     allProducts: [],
+    cartProducts: [],
 }
 
 const saleProductsSlice = createSlice({
@@ -11,32 +12,43 @@ const saleProductsSlice = createSlice({
     initialState,
     reducers: {
         saleProductsReducer: (state, action) => {
-            const data = {
-                products: action.payload,
-            }
-
-            state.saleProducts.push(data)
+            state.saleProducts = action.payload;
         },
         categoryReducer: (state, action) => {
-            const data = {
-                products: action.payload,
-            }
-
-            state.categories.push(data)
+            state.categories = action.payload;
         },
         allProductsReducer: (state, action) => {
-            const data = {
-                products: action.payload,
-            }
-
-            state.allProducts.push(data)
+            state.allProducts = action.payload;
         },
-        // logout: (state) => {
-        //     state.userData.push(null)
-
-        // },
+        addToCartReducer: (state, action) => {
+            const product = action.payload;
+            const existingProduct = state.cartProducts.find(item => item.cartProduct._id === product._id);
+            if (existingProduct) {
+                existingProduct.cartProduct.quantity += product.quantity;
+            } else {
+                state.cartProducts.push({ cartProduct: product });
+            }
+        },
+        removeFromCartReducer: (state, action) => {
+            const productId = action.payload;
+            state.cartProducts = state.cartProducts.filter(item => item.cartProduct._id !== productId);
+        },
+        updateCartQuantityReducer: (state, action) => {
+            const { productId, quantity } = action.payload;
+            const existingProduct = state.cartProducts.find(item => item.cartProduct._id === productId);
+            if (existingProduct) {
+                existingProduct.cartProduct.quantity = quantity;
+            }
+        },
     }
 })
 
-export const { saleProductsReducer, categoryReducer, allProductsReducer } = saleProductsSlice.actions
-export default saleProductsSlice.reducer
+export const {
+    saleProductsReducer,
+    categoryReducer,
+    allProductsReducer,
+    addToCartReducer,
+    removeFromCartReducer,
+    updateCartQuantityReducer
+} = saleProductsSlice.actions;
+export default saleProductsSlice.reducer;

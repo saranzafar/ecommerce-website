@@ -98,7 +98,11 @@ const getAllProducts = asyncHandler(async (req, res) => {
     const { page = 1, limit = 10 } = req.query; // Default values for pagination
 
     const skip = (page - 1) * limit;
-    const products = await Product.find().skip(skip).limit(Number(limit));
+    const products = await Product
+        .find()
+        .skip(skip)
+        .limit(Number(limit))
+        .populate({ path: 'category', select: 'name _id' });
     const totalProducts = await Product.countDocuments();
     const totalPages = Math.ceil(totalProducts / limit);
 
@@ -167,7 +171,6 @@ const addReview = asyncHandler(async (req, res) => {
     const { productId } = req.params;
     const { text, rating } = req.body;
 
-    console.log(productId, text, rating);
 
     if (!text || !rating) {
         throw new apiError(400, "Review text and rating are required");
