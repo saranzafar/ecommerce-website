@@ -5,8 +5,8 @@ import { apiResponse } from "../utils/apiResponse.js";
 
 const toggleWishlist = asyncHandler(async (req, res) => {
     const { productId } = req.body;
-    const userId = req.user.id;
-
+    const userId = req.body.user;
+    console.log("productId =", productId);
     if (!productId) {
         throw new apiError(401, "Product ID is required");
     }
@@ -37,4 +37,26 @@ const toggleWishlist = asyncHandler(async (req, res) => {
     }
 });
 
-export { toggleWishlist };
+const getWishlist = asyncHandler(async (req, res) => {
+    const userId = req.user.id;
+    if (!userId) {
+        throw new apiError(401, "User ID is required");
+    }
+
+    const wishlist = await Wishlist.findOne({ user: userId }).populate('products');
+
+    if (!wishlist) {
+        return res.status(200).json(
+            new apiResponse(200, "Wishlist is empty", [])
+        );
+    }
+
+    return res.status(200).json(
+        new apiResponse(200, "Wishlist retrieved successfully", wishlist.products)
+    );
+});
+
+export {
+    toggleWishlist,
+    getWishlist,
+};
