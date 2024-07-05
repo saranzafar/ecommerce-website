@@ -5,6 +5,7 @@ const initialState = {
     categories: [],
     allProducts: [],
     cartProducts: [],
+    wishlistProducts: []
 }
 
 const saleProductsSlice = createSlice({
@@ -40,6 +41,13 @@ const saleProductsSlice = createSlice({
                 existingProduct.cartProduct.quantity = quantity;
             }
         },
+        wishlistReducer: (state, action) => {
+            state.wishlistProducts = action.payload;
+        },
+        removeFromWishlistReducer: (state, action) => {
+            const productId = action.payload;
+            state.wishlistProducts = state.wishlistProducts.filter(product => product._id !== productId);
+        },
     }
 })
 
@@ -49,6 +57,8 @@ export const {
     allProductsReducer,
     addToCartReducer,
     removeFromCartReducer,
-    updateCartQuantityReducer
+    updateCartQuantityReducer,
+    wishlistReducer,
+    removeFromWishlistReducer
 } = saleProductsSlice.actions;
 export default saleProductsSlice.reducer;

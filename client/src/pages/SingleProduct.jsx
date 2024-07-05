@@ -8,24 +8,24 @@ import { StarIcon, UserCircle2Icon, Loader2Icon } from "lucide-react";
 import { PageLoader } from '../components/index';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { addToCartReducer } from '../store/ecommerceSlice';
 
 function SingleProductPage() {
     const { id } = useParams();
     const [product, setProduct] = useState(null);
     const [submitReviewStatus, setSubmitReviewStatus] = useState(false);
-    const [otherProducts, setOtherProducts] = useState([]);
     const [newReview, setNewReview] = useState({ rating: '', text: '' });
     const allProducts = useSelector(state => state.ecommerce?.allProducts);
     const saleProducts = useSelector(state => state.ecommerce?.saleProducts);
-    const [checkWishlist, setCheckWishlist] = useState();
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        let foundProduct = allProducts?.products.find(p => p._id === id) || saleProducts?.saleProducts.find(p => p._id === id) || [];
-        if (foundProduct) {
+        let foundProduct = allProducts?.products?.find(p => p._id === id) || saleProducts?.saleProducts?.find(p => p._id === id) || [];
+        console.log("Found product = ", foundProduct);
+        if (foundProduct?.length > 0) {
             setProduct(foundProduct);
-            // setOtherProducts(allProducts ? allProducts.filter(p => p.category.name === foundProduct.category.name && p.id !== foundProduct.id).slice(0, 3) : []);
+            console.log("Found product = ", foundProduct);
         } else {
             axios.get(`${conf.backendUrl}products/${id}`, {
                 headers: {
@@ -37,18 +37,17 @@ function SingleProductPage() {
                         ...response.data.message,
                         reviews: response.data.message.reviews || [],
                     });
-                    setOtherProducts(allProducts ? allProducts.filter(p => p.category.name === response.data.message.category.name && p.id !== response.data.message.id).slice(0, 3) : []);
+                    console.log("Response = ", response);
                 })
                 .catch(error => {
                     console.error('Error fetching product data:', error);
                     setProduct(null);
-                    setOtherProducts([]);
                 });
         }
     }, [id, allProducts, saleProducts, dispatch]);
 
     const handleReviewChange = (e) => {
-        setNewReview({ ...newReview, [e.target.name]: e.target.value });
+        setNewReview({ ...newReview, [e?.target?.name]: e.target.value });
     };
 
     const handleReviewSubmit = async () => {
@@ -58,17 +57,13 @@ function SingleProductPage() {
                 Authorization: `Bearer ${Cookies.get('accessToken')}`,
             },
         })
-            .then(response => {
+            .then(() => {
                 setNewReview({ rating: '', text: '' });
-                // setAlertMessage('Review Added');
-                // setAlertVisibilityS(true);
                 toast.success('Review Added');
                 setSubmitReviewStatus(false);
             })
             .catch((error) => {
                 console.error('Error submitting review:', error);
-                // setAlertMessage('An Error Occured');
-                // setAlertVisibilityD(true);
                 toast.error('An Error Occured');
                 setSubmitReviewStatus(false);
             });
@@ -82,27 +77,35 @@ function SingleProductPage() {
         })
             .then(response => {
                 if (response.data.statuscode === 200) {
-                    // setAlertMessage('Added to Wishlist');
-                    // setAlertVisibilityS(true);
                     toast.success('Added to Wishlist');
                 } else if (response.data.statuscode === 203) {
-                    // setAlertMessage('Removed From Wishlist');
-                    // setAlertVisibilityS(true);
                     toast.info('Removed From Wishlist');
                 }
-                // setTimeout(() => {
-                //     setAlertVisibilityS(false);
-                // }, 5000);
             })
             .catch((error) => {
                 console.error('Error submitting review:', error);
-                // setAlertMessage('Removed from Wishlist');
-                // setAlertVisibilityD(true);
                 toast.error('Error handling wishlist action');
-                // setTimeout(() => {
-                //     setAlertVisibilityS(false);
-                // }, 5000);
             });
+    };
+
+    const handleAddToCart = (product) => {
+        const productData = {
+            _id: product._id,
+            primaryImage: product.primaryImage,
+            price: product.sale ? product.sale : product.price,
+            name: product.name,
+            quantity: 1, // Default quantity to 1
+        };
+        dispatch(addToCartReducer(productData));
+        toast.success('Product added to cart!', {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     };
 
     if (!product) {
@@ -115,19 +118,11 @@ function SingleProductPage() {
 
     return (
         <div className="font-sans bg-white" key={product._id}>
-            {/* <Success message={alertMessage} alertVisibilityCheck={alertVisibilityS} /> */}
-            {/* <Danger message={alertMessage} alertVisibilityCheck={alertVisibilityD} /> */}
-            <ToastContainer />
             <div className="p-4 lg:max-w-7xl max-w-4xl mx-auto">
                 <div className="grid items-start grid-cols-1 lg:grid-cols-5 gap-12 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] p-6 rounded-lg">
                     <div className="lg:col-span-3 w-full lg:sticky top-0 text-center">
                         <div className="px-4 py-10 rounded-lg shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] relative">
                             <img src={`${product.primaryImage}`} alt="Product" className="w-3/6 rounded object-cover mx-auto" />
-                            <button type="button" className="absolute top-4 right-4" onClick={toggleWishlist}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20px" fill="#ccc" className="mr-1 hover:fill-[#333]" viewBox="0 0 64 64">
-                                    <path d="M45.5 4A18.53 18.53 0 0 0 32 9.86 18.5 18.5 0 0 0 0 22.5C0 40.92 29.71 59 31 59.71a2 2 0 0 0 2.06 0C34.29 59 64 40.92 64 22.5A18.52 18.52 0 0 0 45.5 4ZM32 55.64C26.83 52.34 4 36.92 4 22.5a14.5 14.5 0 0 1 26.36-8.33 2 2 0 0 0 3.27 0A14.5 14.5 0 0 1 60 22.5c0 14.41-22.83 29.83-28 33.14Z" data-original="#000000"></path>
-                                </svg>
-                            </button>
                         </div>
                         <div className="mt-6 flex flex-wrap justify-center gap-6 mx-auto">
                             {product.secondaryImages?.map((element, index) => (
@@ -138,10 +133,10 @@ function SingleProductPage() {
                         </div>
                     </div>
                     <div className="lg:col-span-2">
-                        <h2 className="text-2xl font-extrabold text-gray-800">{product.name}</h2>
-                        <small className="text-sm pt-2 text-gray-600">{product.category.name}</small>
+                        <h2 className="text-2xl font-extrabold text-gray-800">{product?.name}</h2>
+                        <small className="text-sm pt-2 text-gray-600">{product.category?.name}</small>
                         <div className="flex space-x-2 mt-4">
-                            {[...Array(5)].map((_, index) => (
+                            {[...Array(5)]?.map((_, index) => (
                                 <svg
                                     key={index}
                                     className={`w-5 ${index < Math.round(averageRating) ? 'fill-primary' : 'fill-[#CED5D8]'}`}
@@ -173,8 +168,14 @@ function SingleProductPage() {
                             <small className="pl-2 text-sm">{new Date(product.updatedAt).toLocaleDateString()}</small>
                         </div>
                         <div className="flex flex-wrap gap-4 mt-8">
-                            <button type="button" className="min-w-[200px] px-4 py-3 bg-primary hover:bg-supportivePrimary text-white text-sm font-semibold rounded">Buy now</button>
-                            <button type="button" className="min-w-[200px] px-4 py-2.5 border border-primary bg-transparent hover:bg-yellow-50 text-gray-800 text-sm font-semibold rounded">Add to cart</button>
+                            <button
+                                type="button"
+                                onClick={() => handleAddToCart(product)}
+                                className="min-w-[200px] px-4 py-3 bg-primary hover:bg-supportivePrimary text-white text-sm font-semibold rounded">Add To Cart</button>
+                            <button
+                                type="button"
+                                onClick={toggleWishlist}
+                                className="min-w-[200px] px-4 py-2.5 border border-primary bg-transparent hover:bg-yellow-50 text-gray-800 text-sm font-semibold rounded">Add to Wishlist</button>
                         </div>
                     </div>
                 </div>
@@ -187,14 +188,14 @@ function SingleProductPage() {
                 <div className="mt-16 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] p-6">
                     <h3 className="text-xl font-bold text-gray-800">Customer Reviews</h3>
                     <div className="mt-4">
-                        {product.reviews.map((review, index) => (
+                        {product?.reviews?.map((review, index) => (
                             <div key={index} className="border-b py-4">
                                 <div className="flex items-center mb-2">
                                     <UserCircle2Icon className="h-5 w-5 text-gray-500 mr-2" />
                                     <span className="text-gray-700">{review?.user?.username}</span>
                                 </div>
                                 <div className="flex items-center">
-                                    {[...Array(5)].map((_, i) => (
+                                    {[...Array(5)]?.map((_, i) => (
                                         <StarIcon
                                             key={i}
                                             className={`h-4 w-4 ${i < review.rating ? 'text-yellow-500' : 'text-gray-300'}`}
@@ -217,7 +218,7 @@ function SingleProductPage() {
                                 className="mt-1 p-2 border rounded"
                             >
                                 <option aria-required value="">Select a rating</option>
-                                {[...Array(5)].map((_, index) => (
+                                {[...Array(5)]?.map((_, index) => (
                                     <option key={index} value={index + 1}>{index + 1}</option>
                                 ))}
                             </select>
@@ -251,6 +252,7 @@ function SingleProductPage() {
                     </div>
                 </div>
             </div>
+            <ToastContainer />
         </div>
     );
 }

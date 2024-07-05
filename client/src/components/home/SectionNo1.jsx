@@ -8,7 +8,8 @@ function SectionNo1() {
             <div className="max-w-[85rem] mx-auto px-4 sm:px-6 lg:px-8 mt-10">
                 <div className="grid grid-cols-1 lg:grid-cols-7 lg:gap-x-8 xl:gap-x-12 lg:items-center">
                     <div className="lg:col-span-3">
-                        <h1 className="block text-3xl font-bold text-gray-800 sm:text-4xl md:text-5xl lg:text-6xl dark:text-white ">Feel the Vibe of Great Deals</h1>
+                        <h1 className="block text-3xl font-bold text-gray-800 sm:text-4xl md:text-5xl lg:text-6xl dark:text-white ">Feel the Vibe of Great Deals. <br />
+                        </h1>
                         <p className="mt-3 text-lg text-gray-800 dark:text-neutral-400">Discover an exciting world of unbeatable prices and unique products that elevate your shopping experience.</p>
 
                         <div className="mt-6 lg:mt-12">

@@ -10,6 +10,7 @@ import Wishlist from "./Wishlist"
 import Admin from "./Admin"
 import PageNotFound from "./PageNotFound"
 import SingleProduct from "./SingleProduct"
+import Category from "./Category"
 
 export {
     Home,
@@ -24,4 +25,5 @@ export {
     Admin,
     PageNotFound,
     SingleProduct,
+    Category,
 }

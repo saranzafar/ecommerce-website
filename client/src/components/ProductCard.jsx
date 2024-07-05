@@ -6,7 +6,7 @@ import Success from '../components/alerts/Success';
 import Danger from '../components/alerts/Danger';
 import { PageLoader } from '../components/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { ShoppingCartIcon } from "lucide-react"
+import { ShoppingCartIcon, HeartIcon } from "lucide-react"
 import { saleProductsReducer, addToCartReducer } from '../store/ecommerceSlice';
 import { Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
@@ -81,6 +81,25 @@ function ProductCard() {
         dispatch(addToCartReducer(productData));
     };
 
+    const toggleWishlist = async (id) => {
+        await axios.post(`${conf.backendUrl}wishlist/toggle-wishlist`, { productId: id }, {
+            headers: {
+                Authorization: `Bearer ${Cookies.get('accessToken')}`,
+            },
+        })
+            .then(response => {
+                if (response.data.statuscode === 200) {
+                    toast.success('Added to Wishlist');
+                } else if (response.data.statuscode === 203) {
+                    toast.info('Removed From Wishlist');
+                }
+            })
+            .catch((error) => {
+                console.error('Error submitting review:', error);
+                toast.error('Error handling wishlist action');
+            });
+    };
+
     return (
         <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-3 gap-6'>
             <Success message={alertMessage} alertVisibilityCheck={alertVisibilityS} />
@@ -137,6 +156,14 @@ function ProductCard() {
                                 <ShoppingCartIcon />
                                 <div>Add To Cart</div>
                             </div>
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => toggleWishlist(product._id)}
+                            className="mt-4 w-full rounded-sm text-gray-900 border border-primary px-2 py-1.5 text-sm font-semibold shadow-sm hover:bg-yellow-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black flex gap-2 justify-center items-center"
+                        >
+                            <HeartIcon className='text-gray-800' />
+                            Add to Wishlist
                         </button>
                     </div>
                 </div>

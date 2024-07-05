@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import conf from '../conf/conf';
 import Cookies from 'js-cookie';
-// import Success from '../components/alerts/Success';
-// import Danger from '../components/alerts/Danger';
 import { PageLoader } from '../components/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { allProductsReducer, addToCartReducer } from '../store/ecommerceSlice';
 import { Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
+import { ShoppingCartIcon, HeartIcon } from "lucide-react"
 import 'react-toastify/dist/ReactToastify.css';
 
 function ProductCard() {
@@ -16,7 +15,6 @@ function ProductCard() {
     const dispatch = useDispatch();
     const fetchAllProducts = useSelector((state) => state.ecommerce?.allProducts);
     const allProducts = fetchAllProducts?.products || [];
-    console.log("fetchAllProducts = ", fetchAllProducts);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -60,7 +58,7 @@ function ProductCard() {
         };
 
         fetchData();
-    }, [dispatch, fetchAllProducts]);
+    }, [allProducts.length, dispatch, fetchAllProducts]);
 
     if (loaderVisibility) {
         return <PageLoader />;
@@ -97,10 +95,27 @@ function ProductCard() {
         });
     };
 
+    const toggleWishlist = async (id) => {
+        await axios.post(`${conf.backendUrl}wishlist/toggle-wishlist`, { productId: id }, {
+            headers: {
+                Authorization: `Bearer ${Cookies.get('accessToken')}`,
+            },
+        })
+            .then(response => {
+                if (response.data.statuscode === 200) {
+                    toast.success('Added to Wishlist');
+                } else if (response.data.statuscode === 203) {
+                    toast.info('Removed From Wishlist');
+                }
+            })
+            .catch((error) => {
+                console.error('Error submitting review:', error);
+                toast.error('Error handling wishlist action');
+            });
+    };
+
     return (
         <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-3 gap-6'>
-            {/* <Success message={alertMessage} alertVisibilityCheck={alertVisibilityS} />
-            <Danger message={alertMessage} alertVisibilityCheck={alertVisibilityD} /> */}
             {allProducts.map((product) => {
                 const averageRating = calculateAverageRating(product.reviews);
                 return (
@@ -164,9 +179,18 @@ function ProductCard() {
                             <button
                                 type="button"
                                 onClick={() => handleAddToCart(product)}
-                                className="mt-4 w-full rounded-sm bg-primary px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-supportivePrimary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                                className="mt-4 w-full rounded-sm bg-primary px-2 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-supportivePrimary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black flex gap-2 justify-center items-center"
                             >
+                                <ShoppingCartIcon />
                                 Add to Cart
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => toggleWishlist(product._id)}
+                                className="mt-4 w-full rounded-sm text-gray-900 border border-primary px-2 py-1.5 text-sm font-semibold shadow-sm hover:bg-yellow-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black flex gap-2 justify-center items-center"
+                            >
+                                <HeartIcon className='text-gray-800' />
+                                Add to Wishlist
                             </button>
                         </div>
                     </div>
