@@ -36,21 +36,11 @@ function ProductCard() {
                 toast.success('Products fetched successfully', {
                     position: "bottom-right",
                     autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
                 });
             } catch (err) {
                 toast.error(`Error: ${err.message}`, {
                     position: "bottom-right",
                     autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
                 });
             } finally {
                 setLoaderVisibility(false);
@@ -86,12 +76,6 @@ function ProductCard() {
         dispatch(addToCartReducer(productData));
         toast.success('Product added to cart!', {
             position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
         });
     };
 
@@ -103,14 +87,30 @@ function ProductCard() {
         })
             .then(response => {
                 if (response.data.statuscode === 200) {
-                    toast.success('Added to Wishlist');
+                    toast.success('Added to Wishlist',  {
+                        position: "bottom-right",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
                 } else if (response.data.statuscode === 203) {
                     toast.info('Removed From Wishlist');
                 }
             })
             .catch((error) => {
                 console.error('Error submitting review:', error);
-                toast.error('Error handling wishlist action');
+                toast.error('Error handling wishlist action', {
+                    position: "bottom-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             });
     };
 

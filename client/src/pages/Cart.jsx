@@ -94,7 +94,7 @@ export default function Cart() {
                                                                     <div className="flex">
                                                                         <button
                                                                             type="button"
-                                                                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                                                                            className="font-medium text-green-600 hover:text-red-500"
                                                                             onClick={() => handleRemoveItem(item.cartProduct._id)}
                                                                         >
                                                                             Remove
@@ -117,13 +117,13 @@ export default function Cart() {
                                         <p>Subtotal</p>
                                         <p>${calculateSubtotal().toFixed(2)}</p>
                                     </div>
-                                    <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
+                                    <p className="mt-0.5 text-sm text-gray-500">Cash on Delivery</p>
                                     <div className="mt-6">
                                         <a
                                             href="#"
-                                            className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                                            className="flex items-center justify-center rounded-md border border-transparent bg-green-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-green-700"
                                         >
-                                            Checkout
+                                            Place Order
                                         </a>
                                     </div>
                                     <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
@@ -131,7 +131,7 @@ export default function Cart() {
                                             or{' '}
                                             <button
                                                 type="button"
-                                                className="font-medium text-indigo-600 hover:text-indigo-500"
+                                                className="font-medium text-green-600 hover:text-primary"
                                                 onClick={() => setOpen(false)}
                                             >
                                                 Continue Shopping

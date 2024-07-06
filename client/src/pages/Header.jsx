@@ -11,7 +11,7 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { NavLink } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
-import { ChevronDown, StoreIcon, HeartIcon, BellIcon } from 'lucide-react';
+import { ChevronDown, StoreIcon, HeartIcon, BellIcon, ShoppingCartIcon } from 'lucide-react';
 import { Cart } from '../pages/index';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -21,7 +21,7 @@ const menuItems = [
         to: '/',
     },
     {
-        name: 'Shop',
+        name: 'Shopping',
         to: '/shop',
     },
     {
@@ -114,7 +114,7 @@ export default function Header() {
                                 {checkUserAuthentication ? (
                                     <div className="flex space-x-4">
                                         <div className="relative">
-                                            <StoreIcon
+                                            <ShoppingCartIcon
                                                 onClick={handleCartClick}
                                                 className="hover:text-primary transition duration-100 text-gray-900"
                                                 size={26}

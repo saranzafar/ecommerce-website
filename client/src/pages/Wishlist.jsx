@@ -26,9 +26,16 @@ const Wishlist = () => {
                     }
                 );
                 dispatch(wishlistReducer(response.data.data));
-                toast.success("Wishlist loaded successfully!");
             } catch (err) {
-                toast.error("Failed to load wishlist");
+                toast.error("Failed to load wishlist", {
+                    position: "bottom-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             } finally {
                 setLoaderVisibility(false);
             }
@@ -49,21 +56,53 @@ const Wishlist = () => {
                 }
             );
             dispatch(wishlistReducer(response.data.data));
-            toast.success("Wishlist updated successfully!");
+            toast.success("Wishlist updated successfully!", {
+                position: "bottom-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         } catch (err) {
-            toast.error("Failed to update wishlist");
+            toast.error("Failed to update wishlist", {
+                position: "bottom-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
         }
     };
 
     const removeFromWishlist = (productId) => {
         toggleWishlist(productId); // Use the toggle function to handle removing from wishlist
         dispatch(removeFromWishlistReducer(productId));
-        toast.success("Removed from wishlist!");
+        toast.success("Removed from wishlist!", {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     };
 
     const addToCart = (product) => {
         dispatch(addToCartReducer(product));
-        toast.success("Added to cart!");
+        toast.success("Added to cart!", {
+            position: "bottom-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     };
 
     if (loaderVisibility) {
@@ -99,7 +138,7 @@ const Wishlist = () => {
                     </div>
                 </div>
             ))}
-            <ToastContainer position="bottom-right" />
+            <ToastContainer />
         </div>
     );
 };

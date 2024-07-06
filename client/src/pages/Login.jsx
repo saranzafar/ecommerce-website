@@ -1,20 +1,16 @@
-import React from 'react'
 import { ArrowRight, CircleDashed } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import conf from "../conf/conf.js"
 import { useState } from 'react'
-import Success from '../components/alerts/Success.jsx'
-import Danger from '../components/alerts/Danger.jsx'
 import Cookies from 'js-cookie';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Login() {
     const [formData, setFormData] = useState({ email: '', password: '' });
     const [buttonLoading, setButtonLoading] = useState(false)
-    const [alertMessage, setAlertMessage] = useState("")
-    const [alertVisibilityS, setAlertVisibilityS] = useState(false)
-    const [alertVisibilityD, setAlertVisibilityD] = useState(false)
     const navigate = useNavigate()
 
     const handleChange = (field, value) => {
@@ -33,12 +29,16 @@ export default function Login() {
             Cookies.set('user', JSON.stringify(user), { expires: 7, secure: true, sameSite: 'strict' });
             Cookies.set('accessToken', accessToken, { expires: 7, secure: true, sameSite: 'strict' });
 
-            setAlertVisibilityS(true);
-            setAlertMessage("Login successful");
+            toast.success('Login successfully', {
+                position: "bottom-right",
+                autoClose: 3000,
+            });
             navigate("/"); // Uncomment this line if you want to redirect
         } catch (err) {
-            setAlertVisibilityD(true);
-            setAlertMessage(err.message);
+            toast.error(`Error: ${err.message}`, {
+                position: "bottom-right",
+                autoClose: 2000,
+            });
         } finally {
             setButtonLoading(false);
         }
@@ -46,8 +46,7 @@ export default function Login() {
 
     return (
         <section>
-            <Success message={alertMessage} alertVisibilityCheck={alertVisibilityS} />
-            <Danger message={alertMessage} alertVisibilityCheck={alertVisibilityD} />
+            <ToastContainer />
             <div className="lg:grid lg:grid-cols-2 md:grid md:grid-cols-2 flex flex-wrap-reverse justify-center items-center">
                 <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
                     <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">

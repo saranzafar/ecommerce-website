@@ -77,7 +77,15 @@ function SingleProductPage() {
         })
             .then(response => {
                 if (response.data.statuscode === 200) {
-                    toast.success('Added to Wishlist');
+                    toast.success('Added to Wishlist', {
+                        position: "bottom-right",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
                 } else if (response.data.statuscode === 203) {
                     toast.info('Removed From Wishlist');
                 }

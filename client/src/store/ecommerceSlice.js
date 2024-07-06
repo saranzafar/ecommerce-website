@@ -5,7 +5,7 @@ const initialState = {
     categories: [],
     allProducts: [],
     cartProducts: [],
-    wishlistProducts: []
+    wishlistProducts: [],
 }
 
 const saleProductsSlice = createSlice({

@@ -156,17 +156,17 @@ function Footer() {
 
                         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:col-span-2 lg:grid-cols-4">
                             <div>
-                                <p className="font-medium text-gray-900">Categories</p>
+                                <p className="font-medium text-gray-900">Famous Categories</p>
 
                                 <ul className="mt-6 space-y-4 text-sm">
                                     <li>
-                                        <Link to="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Category 1 </Link>
+                                        <Link to={`/category/66840cf89cce4e0e673d6550`} className="text-gray-700 transition hover:text-supportivePrimary hover:underline">Fashion & Apparel</Link>
                                     </li>
                                     <li>
-                                        <Link to="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Category 2 </Link>
+                                        <Link to={`/category/66840d0f9cce4e0e673d6556`} className="text-gray-700 transition hover:text-supportivePrimary hover:underline">Health & Beauty</Link>
                                     </li>
                                     <li>
-                                        <Link to="#" className="text-gray-700 transition hover:text-supportivePrimary hover:underline"> Category 3</Link>
+                                        <Link to={`/category/66840ce79cce4e0e673d654d`} className="text-gray-700 transition hover:text-supportivePrimary hover:underline">Electronics & Gadgets</Link>
                                     </li>
                                 </ul>
                             </div>
@@ -223,7 +223,7 @@ function Footer() {
                         </div>
                     </div>
 
-                    <p className="text-xs text-gray-500">&copy; 2024. Company Name. All rights reserved.</p>
+                    <p className="text-xs text-gray-500">&copy; 2024. Shopvibe | All rights reserved.</p>
                 </div>
             </footer>
         </div>

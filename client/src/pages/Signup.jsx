@@ -4,17 +4,14 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import conf from "../conf/conf.js"
 import { useState } from 'react'
-import Success from '../components/alerts/Success.jsx'
-import Danger from '../components/alerts/Danger.jsx'
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
 export default function Signup() {
     const [formData, setFormData] = useState({ name: '', email: '', password: '', address: '', phnumber: '' });
     const [buttonLoading, setButtonLoading] = useState(false)
-    const [alertMessage, setAlertMessage] = useState("")
-    const [alertVisibilityS, setAlertVisibilityS] = useState(false)
-    const [alertVisibilityD, setAlertVisibilityD] = useState(false)
     const navigate = useNavigate()
 
     const handleChange = (field, value) => {
@@ -29,23 +26,25 @@ export default function Signup() {
 
         await axios.post(`${conf.backendUrl}users/register`, formData)
             .then((response) => {
-                setAlertVisibilityS(true)
-                setAlertMessage(response.data.message)
+                toast.success(`${response.data.message}`, {
+                    position: "bottom-right",
+                    autoClose: 2000,
+                });
                 navigate("/login") //redirection
                 setButtonLoading(false)
             })
             .catch((err) => {
-                setAlertVisibilityD(true)
+                toast.error(`Error: ${err.message}`, {
+                    position: "bottom-right",
+                    autoClose: 2000,
+                });
                 setButtonLoading(false)
-                // const htmlmessage = err.response.data.split("Error")[2].split("<br>")[0].split(":")[1]?.split("&")[0]
-                setAlertMessage(err.message);
             })
     };
 
     return (
         <section>
-            <Success message={alertMessage} alertVisibilityCheck={alertVisibilityS} />
-            <Danger message={alertMessage} alertVisibilityCheck={alertVisibilityD} />
+            <ToastContainer />
             <div className="lg:grid lg:grid-cols-2 md:grid md:grid-cols-2 flex flex-wrap-reverse justify-center items-center">
                 <div className="flex items-center justify-center px-4 py-10 sm:px-6 sm:py-16 lg:px-8 lg:py-24">
                     <div className="xl:mx-auto xl:w-full xl:max-w-sm 2xl:max-w-md">

@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import conf from '../conf/conf';
 import Cookies from 'js-cookie';
-import Success from '../components/alerts/Success';
-import Danger from '../components/alerts/Danger';
 import { PageLoader } from '../components/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { ShoppingCartIcon, HeartIcon } from "lucide-react"
@@ -13,9 +11,6 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function ProductCard() {
-    const [alertMessage, setAlertMessage] = useState('');
-    const [alertVisibilityS, setAlertVisibilityS] = useState(false);
-    const [alertVisibilityD, setAlertVisibilityD] = useState(false);
     const [loaderVisibility, setLoaderVisibility] = useState(true);
     const dispatch = useDispatch();
     const fetchSaleProducts = useSelector((state) => state.ecommerce?.saleProducts);
@@ -38,16 +33,29 @@ function ProductCard() {
                     }
                 );
                 dispatch(saleProductsReducer(response.data.message));
-                setAlertMessage('Products fetched successfully');
-                setAlertVisibilityS(true);
+                toast.success('Added to Wishlist', {
+                    position: "bottom-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             } catch (err) {
-                setAlertMessage(err.message);
-                setAlertVisibilityD(true);
+                toast.error('Error While Fetching Products', {
+                    position: "bottom-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             } finally {
                 setLoaderVisibility(false);
             }
         };
-
         fetchData();
     }, [dispatch, fetchSaleProducts, saleProducts?.length]);
 
@@ -63,12 +71,6 @@ function ProductCard() {
     const handleAddToCart = (product) => {
         toast.success('Product added to cart!', {
             position: "bottom-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
         });
 
         const productData = {
@@ -89,21 +91,43 @@ function ProductCard() {
         })
             .then(response => {
                 if (response.data.statuscode === 200) {
-                    toast.success('Added to Wishlist');
+                    toast.success('Added to Wishlist', {
+                        position: "bottom-right",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
                 } else if (response.data.statuscode === 203) {
-                    toast.info('Removed From Wishlist');
+                    toast.info('Removed From Wishlist', {
+                        position: "bottom-right",
+                        autoClose: 2000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                    });
                 }
             })
             .catch((error) => {
                 console.error('Error submitting review:', error);
-                toast.error('Error handling wishlist action');
+                toast.error('Error handling wishlist action', {
+                    position: "bottom-right",
+                    autoClose: 2000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                });
             });
     };
 
     return (
         <div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-3 gap-6'>
-            <Success message={alertMessage} alertVisibilityCheck={alertVisibilityS} />
-            <Danger message={alertMessage} alertVisibilityCheck={alertVisibilityD} />
             {saleProducts && saleProducts.map((product, index) => (
                 <div className="rounded-md border hover:shadow-lg hover:-translate-y-2 transition-all duration-200" key={saleProducts[index]._id}>
 
