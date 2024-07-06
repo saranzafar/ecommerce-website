@@ -126,7 +126,6 @@ const getAllProductsInCategory = asyncHandler(async (req, res) => {
                 limit: parseInt(limit) // Ensure `limit` is an integer
             }
         });
-
         if (!category) {
             return res.status(404).json({
                 status: 404,
