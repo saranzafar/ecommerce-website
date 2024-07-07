@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import { SectionNo1 } from "../components/home/index"
 import { ProductCard, Categories, Testimonial } from "../components/index"
 

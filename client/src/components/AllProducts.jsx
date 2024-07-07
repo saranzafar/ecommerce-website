@@ -87,7 +87,7 @@ function ProductCard() {
         })
             .then(response => {
                 if (response.data.statuscode === 200) {
-                    toast.success('Added to Wishlist',  {
+                    toast.success('Added to Wishlist 111',  {
                         position: "bottom-right",
                         autoClose: 2000,
                         hideProgressBar: false,

@@ -1,11 +1,11 @@
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { ArrowRight, CircleDashed } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import conf from "../conf/conf.js"
 import { useState } from 'react'
 import Cookies from 'js-cookie';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 
 export default function Login() {

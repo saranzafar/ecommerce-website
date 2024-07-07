@@ -1,3 +1,5 @@
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
@@ -5,8 +7,6 @@ import conf from '../conf/conf';
 import Cookies from 'js-cookie';
 import { wishlistReducer, removeFromWishlistReducer, addToCartReducer } from '../store/ecommerceSlice';
 import { PageLoader } from '../components';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { Trash, ShoppingCart } from 'lucide-react';
 
 const Wishlist = () => {
@@ -42,7 +42,7 @@ const Wishlist = () => {
         };
 
         fetchWishlist();
-    }, [dispatch]);
+    }, []);
 
     const toggleWishlist = async (productId) => {
         try {

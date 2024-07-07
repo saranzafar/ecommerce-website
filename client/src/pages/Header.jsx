@@ -11,9 +11,9 @@ import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { NavLink } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { useState, useEffect } from 'react';
-import { ChevronDown, StoreIcon, HeartIcon, BellIcon, ShoppingCartIcon } from 'lucide-react';
+import { ChevronDown, HeartIcon, BellIcon, ShoppingCartIcon } from 'lucide-react';
 import { Cart } from '../pages/index';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 const menuItems = [
     {

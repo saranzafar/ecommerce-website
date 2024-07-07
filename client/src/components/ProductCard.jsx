@@ -1,24 +1,24 @@
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import conf from '../conf/conf';
 import Cookies from 'js-cookie';
 import { PageLoader } from '../components/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { ShoppingCartIcon, HeartIcon } from "lucide-react"
+import { ShoppingCartIcon, HeartIcon } from "lucide-react";
 import { saleProductsReducer, addToCartReducer } from '../store/ecommerceSlice';
 import { Link } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 function ProductCard() {
     const [loaderVisibility, setLoaderVisibility] = useState(true);
     const dispatch = useDispatch();
     const fetchSaleProducts = useSelector((state) => state.ecommerce?.saleProducts);
-    const saleProducts = fetchSaleProducts.saleProducts
+    const saleProducts = fetchSaleProducts?.saleProducts || [];
 
     useEffect(() => {
         const fetchData = async () => {
-            if (fetchSaleProducts && saleProducts?.length > 1) {
+            if (saleProducts.length > 1) {
                 setLoaderVisibility(false);
                 return;
             }
@@ -33,7 +33,7 @@ function ProductCard() {
                     }
                 );
                 dispatch(saleProductsReducer(response.data.message));
-                toast.success('Added to Wishlist', {
+                toast.success('Products fetched successfully', {
                     position: "bottom-right",
                     autoClose: 2000,
                     hideProgressBar: false,
@@ -56,6 +56,7 @@ function ProductCard() {
                 setLoaderVisibility(false);
             }
         };
+
         fetchData();
     }, [dispatch, fetchSaleProducts, saleProducts?.length]);
 
@@ -91,7 +92,7 @@ function ProductCard() {
         })
             .then(response => {
                 if (response.data.statuscode === 200) {
-                    toast.success('Added to Wishlist', {
+                    toast.success('Added to Wishlist 333', {
                         position: "bottom-right",
                         autoClose: 2000,
                         hideProgressBar: false,

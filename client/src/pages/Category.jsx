@@ -1,13 +1,13 @@
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { toast, ToastContainer } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 import { PageLoader } from '../components';
 import conf from '../conf/conf';
 import Cookies from 'js-cookie';
-import { allProductsReducer, addToCartReducer } from '../store/ecommerceSlice';
-import 'react-toastify/dist/ReactToastify.css';
+import { addToCartReducer } from '../store/ecommerceSlice';
 import { ShoppingCartIcon, HeartIcon } from "lucide-react";
 
 function CategoryProducts() {
@@ -101,7 +101,7 @@ function CategoryProducts() {
                 },
             });
             if (response.data.statuscode === 200) {
-                toast.success('Added to Wishlist', {
+                toast.success('Added to Wishlist 444', {
                     position: "bottom-right",
                     autoClose: 2000,
                     hideProgressBar: false,

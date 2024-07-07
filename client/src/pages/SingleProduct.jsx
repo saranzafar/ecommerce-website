@@ -1,3 +1,5 @@
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -6,8 +8,6 @@ import conf from '../conf/conf';
 import Cookies from 'js-cookie';
 import { StarIcon, UserCircle2Icon, Loader2Icon } from "lucide-react";
 import { PageLoader } from '../components/index';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { addToCartReducer } from '../store/ecommerceSlice';
 
 function SingleProductPage() {
@@ -77,7 +77,7 @@ function SingleProductPage() {
         })
             .then(response => {
                 if (response.data.statuscode === 200) {
-                    toast.success('Added to Wishlist', {
+                    toast.success('Added to Wishlist 555', {
                         position: "bottom-right",
                         autoClose: 2000,
                         hideProgressBar: false,
