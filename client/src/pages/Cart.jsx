@@ -8,6 +8,9 @@ export default function Cart() {
     const fetchCartData = useSelector((state) => state.ecommerce?.cartProducts) || [];
     const dispatch = useDispatch();
     const [open, setOpen] = useState(true);
+    const [dataToBeSend, setDataToBeSend] = useState(fetchCartData);
+
+    console.log("Fetch cart Data = ", dataToBeSend);
 
     const calculateSubtotal = () => {
         return fetchCartData.reduce((total, item) => total + (item.cartProduct.price * item.cartProduct.quantity), 0);
@@ -96,6 +99,7 @@ export default function Cart() {
                                                                             type="button"
                                                                             className="font-medium text-green-600 hover:text-red-500"
                                                                             onClick={() => handleRemoveItem(item.cartProduct._id)}
+                                                                            set
                                                                         >
                                                                             Remove
                                                                         </button>

@@ -42,7 +42,7 @@ const Wishlist = () => {
         };
 
         fetchWishlist();
-    }, []);
+    }, [dispatch]);
 
     const toggleWishlist = async (productId) => {
         try {

@@ -1,3 +1,5 @@
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import conf from '../conf/conf';
@@ -6,9 +8,7 @@ import { PageLoader } from '../components/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { allProductsReducer, addToCartReducer } from '../store/ecommerceSlice';
 import { Link } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
 import { ShoppingCartIcon, HeartIcon } from "lucide-react"
-import 'react-toastify/dist/ReactToastify.css';
 
 function ProductCard() {
     const [loaderVisibility, setLoaderVisibility] = useState(true);
@@ -33,10 +33,7 @@ function ProductCard() {
                     }
                 );
                 dispatch(allProductsReducer(response.data.message));
-                toast.success('Products fetched successfully', {
-                    position: "bottom-right",
-                    autoClose: 2000,
-                });
+
             } catch (err) {
                 toast.error(`Error: ${err.message}`, {
                     position: "bottom-right",

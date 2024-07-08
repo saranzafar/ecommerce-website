@@ -27,17 +27,8 @@ function CategoryProducts() {
                         },
                     }
                 );
-                console.log("LOG ", response.data);
                 setAllProducts(response.data.products)
-                toast.success('Products fetched successfully', {
-                    position: "bottom-right",
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
+
             } catch (err) {
                 console.log("Error:", err);
                 toast.error(`Error: ${err.response?.data?.message || err.message}`,
