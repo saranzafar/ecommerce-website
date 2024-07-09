@@ -11,6 +11,7 @@ import Admin from "./Admin"
 import PageNotFound from "./PageNotFound"
 import SingleProduct from "./SingleProduct"
 import Category from "./Category"
+import Notification from "./Notification"
 
 export {
     Home,
@@ -26,4 +27,5 @@ export {
     PageNotFound,
     SingleProduct,
     Category,
+    Notification,
 }

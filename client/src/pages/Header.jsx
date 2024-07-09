@@ -35,7 +35,6 @@ function classNames(...classes) {
 }
 
 export default function Header() {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [checkUserAuthentication, setCheckUserAuthentication] = useState(false);
     const [cartVisibility, setCartVisibility] = useState(false);
 
@@ -57,7 +56,7 @@ export default function Header() {
     };
 
     return (
-        <Disclosure as="nav" className="bg-white border-b">
+        <Disclosure as="nav" className="bg-white/30 border-b backdrop-blur-sm sticky top-0 z-10">
             {({ open }) => (
                 <>
                     <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -131,6 +130,8 @@ export default function Header() {
                                                     className="hover:text-primary transition duration-100 text-gray-900"
                                                     size={26}
                                                 />
+                                                <span className="absolute -top-1 -right-1 flex h-2 w-2 items-center justify-center rounded-full bg-red-500 text-white text-xs">
+                                                </span>
                                             </NavLink>
                                             {wishlistItems > 0 && (
                                                 <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-white text-xs">
@@ -142,18 +143,20 @@ export default function Header() {
                                             <MenuButton>
                                                 <span className="sr-only">Open user menu</span>
                                                 <BellIcon className="h-6 w-6 text-gray-800" />
+                                                <span className="absolute -top-1 -right-1 flex h-2 w-2 items-center justify-center rounded-full bg-red-500 text-white text-xs">
+                                                </span>
                                             </MenuButton>
                                             <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                                                 <MenuItem>
                                                     {({ active }) => (
                                                         <NavLink
-                                                            to="/settings"
+                                                            to="/notification"
                                                             className={classNames(
                                                                 active ? 'bg-gray-100' : '',
                                                                 'block px-4 py-2 text-sm text-gray-700'
                                                             )}
                                                         >
-                                                            Settings
+                                                            Notifications
                                                         </NavLink>
                                                     )}
                                                 </MenuItem>

@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App.jsx';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { Home, ContactUs, Shop, Signup, Login, Cart, Wishlist, Admin, PageNotFound, SingleProduct, Category } from "./pages/index.js";
+import { Home, ContactUs, Shop, Signup, Login, Cart, Wishlist, Admin, PageNotFound, SingleProduct, Category, Notification } from "./pages/index.js";
 import { AuthLayout } from './components/index.js';
 import { Provider } from 'react-redux';
 import store from './store/store.js';
@@ -66,6 +66,12 @@ const router = createBrowserRouter([
         path: "/wishlist",
         element: (
           <Wishlist />
+        ),
+      },
+      {
+        path: "/notification",
+        element: (
+          <Notification />
         ),
       },
       {

@@ -14,6 +14,7 @@ export default function Cart() {
     const dispatch = useDispatch();
     const [open, setOpen] = useState(true);
     const [address, setaddress] = useState("");
+    const [buttonAppearence, setButtonAppearence] = useState(true)
 
     const calculateSubtotal = () => {
         return fetchCartData.reduce((total, item) => total + (item.cartProduct.price * item.cartProduct.quantity), 0);
@@ -31,6 +32,7 @@ export default function Cart() {
 
     const handlePlaceOrder = async (e) => {
         e.preventDefault()
+        setButtonAppearence(false)
         const dataToBeSend = {
             products: fetchCartData.map(item => ({
                 productId: item.cartProduct._id,
@@ -56,13 +58,16 @@ export default function Cart() {
                 autoClose: 2000,
             });
         }
+        finally {
+            setButtonAppearence(true)
+        }
     };
 
     return (
         <Dialog className="relative z-10" open={open} onClose={setOpen}>
             <DialogBackdrop
                 transition
-                className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"
+                className="fixed inset-0 bg-white bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"
             />
             <div className="fixed inset-0 overflow-hidden">
                 <div className="absolute inset-0 overflow-hidden">
@@ -71,7 +76,7 @@ export default function Cart() {
                             transition
                             className="pointer-events-auto w-screen max-w-md transform transition duration-500 ease-in-out data-[closed]:translate-x-full sm:duration-700"
                         >
-                            <div className="flex h-full flex-col overflow-y-scroll bg-white shadow-xl">
+                            <div className="flex h-full flex-col overflow-y-scroll bg-white/30 shadow-xl backdrop-blur-sm ">
                                 <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
                                     <div className="flex items-start justify-between">
                                         <DialogTitle className="text-lg font-medium text-gray-900">Shopping cart</DialogTitle>

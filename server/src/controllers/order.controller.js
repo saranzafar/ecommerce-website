@@ -8,6 +8,7 @@ import { startSession } from 'mongoose';
 
 const placeOrder = asyncHandler(async (req, res) => {
     const { products, totalprice, address } = req.body;
+    console.log("USER = ", req.user._id);
     if (!products || !totalprice) {
         throw new apiError(403, "All Fields are required");
     }
@@ -47,6 +48,19 @@ const placeOrder = asyncHandler(async (req, res) => {
         throw new apiError(500, "Error placing order and updating product quantities");
     }
 });
+const getOrder = asyncHandler(async (req, res) => {
+    const userId = req.user._id
+    const order = await Order.find({ buyer: req.user._id }).select("")
+    if (!order) {
+        return res.status(200).json(
+            new apiResponse(200, {}, "No Order Found")
+        );
+    }
+
+    return res.status(200).json(
+        new apiResponse(200, order, "Order History Fetched")
+    );
+})
 
 const changeOrderStatus = asyncHandler(async (req, res) => {
     const { orderStatus, orderId } = req.body;
@@ -154,4 +168,5 @@ const changeOrderStatus = asyncHandler(async (req, res) => {
 export {
     placeOrder,
     changeOrderStatus,
+    getOrder,
 }
