@@ -11,8 +11,9 @@ import { Trash, ShoppingCart } from 'lucide-react';
 
 const Wishlist = () => {
     const dispatch = useDispatch();
-    const wishlistProducts = useSelector((state) => state.ecommerce.wishlistProducts);
     const [loaderVisibility, setLoaderVisibility] = useState(true);
+    const [wishlistProducts, setWishlistProducts] = useState();
+    console.log("Wishlist = ", wishlistProducts);
 
     useEffect(() => {
         const fetchWishlist = async () => {
@@ -25,8 +26,10 @@ const Wishlist = () => {
                         },
                     }
                 );
-                dispatch(wishlistReducer(response.data.data));
+                console.log("Response = ", response.data);
+                setWishlistProducts(response.data.data || [])
             } catch (err) {
+                setWishlistProducts([])
                 toast.error("Failed to load wishlist", {
                     position: "bottom-right",
                     autoClose: 2000,
@@ -55,7 +58,7 @@ const Wishlist = () => {
                     },
                 }
             );
-            dispatch(wishlistReducer(response.data.data));
+            console.log("Togglewishlist", response.data);
             toast.success("Wishlist updated successfully!", {
                 position: "bottom-right",
                 autoClose: 2000,
@@ -79,8 +82,8 @@ const Wishlist = () => {
     };
 
     const removeFromWishlist = (productId) => {
-        toggleWishlist(productId); // Use the toggle function to handle removing from wishlist
-        dispatch(removeFromWishlistReducer(productId));
+        toggleWishlist(productId); 
+
         toast.success("Removed from wishlist!", {
             position: "bottom-right",
             autoClose: 2000,
@@ -111,7 +114,7 @@ const Wishlist = () => {
 
     return (
         <div className='grid grid-cols-1 lg:grid-cols-3 md:grid-cols-3 sm:grid-cols-2 gap-4'>
-            {wishlistProducts && wishlistProducts.map((product) => (
+            {wishlistProducts && wishlistProducts?.map((product) => (
                 <div key={product._id} className="px-4 py-6 md:px-8 md:py-12 hover:shadow-lg rounded-lg transition-all duration-300 hover:-translate-y-2 hover:bg-yellow-100">
                     <div className="space-y-4">
                         <div className="flex justify-center">

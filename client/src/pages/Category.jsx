@@ -75,7 +75,7 @@ function CategoryProducts() {
         dispatch(addToCartReducer(productData));
         toast.success('Product added to cart!', {
             position: "bottom-right",
-            autoClose: 3000,
+            autoClose: 2000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,

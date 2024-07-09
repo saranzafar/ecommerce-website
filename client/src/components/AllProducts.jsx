@@ -73,6 +73,7 @@ function ProductCard() {
         dispatch(addToCartReducer(productData));
         toast.success('Product added to cart!', {
             position: "bottom-right",
+            autoClose: 2000,
         });
     };
 

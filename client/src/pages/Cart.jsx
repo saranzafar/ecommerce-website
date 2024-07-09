@@ -1,16 +1,19 @@
-import { useState, useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useState } from 'react';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { useDispatch, useSelector } from 'react-redux';
-import { addToCartReducer, removeFromCartReducer, updateCartQuantityReducer } from '../store/ecommerceSlice';
+import axios from 'axios';
+import { removeFromCartReducer, updateCartQuantityReducer } from '../store/ecommerceSlice';
+import conf from '../conf/conf';
+import Cookies from 'js-cookie';
 
 export default function Cart() {
     const fetchCartData = useSelector((state) => state.ecommerce?.cartProducts) || [];
     const dispatch = useDispatch();
     const [open, setOpen] = useState(true);
-    const [dataToBeSend, setDataToBeSend] = useState(fetchCartData);
-
-    console.log("Fetch cart Data = ", dataToBeSend);
+    const [address, setaddress] = useState("");
 
     const calculateSubtotal = () => {
         return fetchCartData.reduce((total, item) => total + (item.cartProduct.price * item.cartProduct.quantity), 0);
@@ -23,6 +26,35 @@ export default function Cart() {
     const handleQuantityChange = (productId, newQuantity) => {
         if (newQuantity > 0) {
             dispatch(updateCartQuantityReducer({ productId, quantity: newQuantity }));
+        }
+    };
+
+    const handlePlaceOrder = async (e) => {
+        e.preventDefault()
+        const dataToBeSend = {
+            products: fetchCartData.map(item => ({
+                productId: item.cartProduct._id,
+                quantity: item.cartProduct.quantity.toString(),
+            })),
+            totalprice: calculateSubtotal(),
+            address: address,
+        };
+
+        try {
+            const response = await axios.post(`${conf.backendUrl}order/place-order`, dataToBeSend, {
+                headers: {
+                    Authorization: `Bearer ${Cookies.get('accessToken')}`,
+                },
+            });
+            toast.success(response.data.message, {
+                position: "bottom-right",
+                autoClose: 2000,
+            });
+        } catch (error) {
+            toast.error(`Error: ${error.message}`, {
+                position: "bottom-right",
+                autoClose: 2000,
+            });
         }
     };
 
@@ -99,7 +131,6 @@ export default function Cart() {
                                                                             type="button"
                                                                             className="font-medium text-green-600 hover:text-red-500"
                                                                             onClick={() => handleRemoveItem(item.cartProduct._id)}
-                                                                            set
                                                                         >
                                                                             Remove
                                                                         </button>
@@ -118,18 +149,36 @@ export default function Cart() {
 
                                 <div className="border-t border-gray-200 px-4 py-6 sm:px-6">
                                     <div className="flex justify-between text-base font-medium text-gray-900">
-                                        <p>Subtotal</p>
-                                        <p>${calculateSubtotal().toFixed(2)}</p>
+                                        <div>
+                                            <p>Total</p>
+                                            <p className="mt-0.5 text-sm text-gray-500">Cash on Delivery</p>
+                                        </div>
+
+                                        <div>
+                                            <p>${calculateSubtotal().toFixed(2)}</p>
+                                            <p className="mt-0.5 text-sm text-gray-500">Delivery Charges $0</p>
+                                        </div>
+
                                     </div>
-                                    <p className="mt-0.5 text-sm text-gray-500">Cash on Delivery</p>
-                                    <div className="mt-6">
-                                        <a
-                                            href="#"
-                                            className="flex items-center justify-center rounded-md border border-transparent bg-green-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-green-700"
-                                        >
-                                            Place Order
-                                        </a>
-                                    </div>
+                                    <form onSubmit={(e) => handlePlaceOrder(e)} className='mt-6'>
+                                        <input
+                                            className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                                            type="text"
+                                            placeholder="Enter Your Address"
+                                            onChange={(e) => setaddress(e.target.value)}
+                                            autoComplete='street-address'
+                                            required
+                                        />
+                                        <div className="mt-2">
+                                            <button
+                                                type='submit'
+                                                className="flex items-center justify-center rounded-md border border-transparent bg-green-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-green-700"
+                                            >
+                                                Place Order
+                                            </button>
+                                        </div>
+                                    </form>
+
                                     <div className="mt-6 flex justify-center text-center text-sm text-gray-500">
                                         <p>
                                             or{' '}

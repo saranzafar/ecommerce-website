@@ -33,15 +33,6 @@ function ProductCard() {
                     }
                 );
                 dispatch(saleProductsReducer(response.data.message));
-                toast.success('Products fetched successfully', {
-                    position: "bottom-right",
-                    autoClose: 2000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                });
             } catch (err) {
                 toast.error('Error While Fetching Products', {
                     position: "bottom-right",
@@ -72,6 +63,7 @@ function ProductCard() {
     const handleAddToCart = (product) => {
         toast.success('Product added to cart!', {
             position: "bottom-right",
+            autoClose: 2000,
         });
 
         const productData = {

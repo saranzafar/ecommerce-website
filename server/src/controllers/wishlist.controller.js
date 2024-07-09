@@ -5,7 +5,7 @@ import { apiResponse } from "../utils/apiResponse.js";
 
 const toggleWishlist = asyncHandler(async (req, res) => {
     const { productId } = req.body;
-    const userId = req.body.user;
+    const userId = req.user._id;
     if (!productId) {
         throw new apiError(401, "Product ID is required");
     }
