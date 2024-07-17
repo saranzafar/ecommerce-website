@@ -62,7 +62,7 @@ function Notification() {
                             <div className="px-9 pt-5 flex justify-between items-stretch flex-wrap min-h-[70px] pb-0 bg-transparent">
                                 <h3 className="flex flex-col items-start justify-center m-2 ml-0 font-medium text-xl/tight text-dark">
                                     <span className="mr-3 font-semibold text-dark text-lg">Order Data</span>
-                                    <span className="mt-1 font-normal text-sm">After Order placed, It can't be canceled. You have to contact our customer support team.</span>
+                                    <span className="mt-1 font-normal text-[0.95rem]">After Order placed, It can't be canceled. You have to contact our customer support team.</span>
                                 </h3>
                                 <div className="relative flex flex-wrap items-center my-2">
                                     <Link to="/shop" className="inline-block text-[.925rem] font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-150 ease-in-out text-light-inverse bg-light-dark border-light shadow-none border-0 py-2 px-5 hover:bg-secondary active:bg-light focus:bg-light text-primary underline">See other Products </Link>
@@ -74,7 +74,7 @@ function Notification() {
                                         <thead className="align-bottom">
                                             <tr className="font-semibold text-[0.95rem] text-secondary-dark">
                                                 <th className="pb-3 text-start min-w-[175px]">ADDRESS</th>
-                                                <th className="pb-3 text-end min-w-[100px]">ORDER-ID</th>
+                                                <th className="pb-3 text-center min-w-[100px]">ORDER-ID</th>
                                                 <th className="pb-3 text-end min-w-[100px]">QUANTITY</th>
                                                 <th className="pb-3 text-end min-w-[100px]">PRICE</th>
                                                 <th className="pb-3 pr-12 text-end min-w-[175px]">STATUS</th>
@@ -112,7 +112,9 @@ function Notification() {
                                                 </tr>
                                             ))}
                                             {!orderData && (
-                                                <div>No Order Found. This may be due to Poor Internet</div>
+                                                <div className='text-center w-full'>
+                                                    <p className='text-center'>No Order Found. This may be due to Poor Internet</p>
+                                                </div>
                                             )}
                                         </tbody>
                                     </table>
