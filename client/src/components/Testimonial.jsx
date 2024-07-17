@@ -4,7 +4,7 @@ export default function Testimonial() {
     return (
         <div className='grid grid-cols-1 lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-2 gap-10'>
             <section className="px-2 py-10 md:px-0">
-                <div className="mx-auto max-w-4xl hover:shadow-xl hover:-translate-y-1 rounded-lg transition duration-200 p-5 hover:bg-yellow-100">
+                <div className="mx-auto max-w-4xl rounded-lg p-5">
                     <div className="md:flex md:items-center md:justify-center md:space-x-2">
                         <div className="relative h-48 w-32 flex-shrink-0">
                             <img
@@ -28,7 +28,7 @@ export default function Testimonial() {
             </section>
 
             <section className="px-2 py-10 md:px-0">
-                <div className="mx-auto max-w-4xl hover:shadow-xl hover:-translate-y-1 rounded-lg transition duration-200 p-5 hover:bg-yellow-100">
+                <div className="mx-auto max-w-4xl rounded-lg p-5">
                     <div className="md:flex md:items-center md:justify-center md:space-x-2">
                         <div className="relative h-48 w-32 flex-shrink-0">
                             <img

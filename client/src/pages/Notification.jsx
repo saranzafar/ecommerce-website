@@ -61,11 +61,11 @@ function Notification() {
                         <div className="relative flex flex-col min-w-0 break-words border border-dashed bg-clip-border rounded-2xl border-stone-200 bg-light/30">
                             <div className="px-9 pt-5 flex justify-between items-stretch flex-wrap min-h-[70px] pb-0 bg-transparent">
                                 <h3 className="flex flex-col items-start justify-center m-2 ml-0 font-medium text-xl/tight text-dark">
-                                    <span className="mr-3 font-semibold text-dark">Order Data</span>
-                                    <span className="mt-1 font-medium text-secondary-dark text-lg/normal">All projects from the Loopple team</span>
+                                    <span className="mr-3 font-semibold text-dark text-lg">Order Data</span>
+                                    <span className="mt-1 font-normal text-sm">After Order placed, It can't be canceled. You have to contact our customer support team.</span>
                                 </h3>
                                 <div className="relative flex flex-wrap items-center my-2">
-                                    <Link to="/shop" className="inline-block text-[.925rem] font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-150 ease-in-out text-light-inverse bg-light-dark border-light shadow-none border-0 py-2 px-5 hover:bg-secondary active:bg-light focus:bg-light"> See other Products </Link>
+                                    <Link to="/shop" className="inline-block text-[.925rem] font-medium leading-normal text-center align-middle cursor-pointer rounded-2xl transition-colors duration-150 ease-in-out text-light-inverse bg-light-dark border-light shadow-none border-0 py-2 px-5 hover:bg-secondary active:bg-light focus:bg-light text-primary underline">See other Products </Link>
                                 </div>
                             </div>
                             <div className="flex-auto block py-8 pt-6 px-9">

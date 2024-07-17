@@ -56,7 +56,7 @@ export default function Categories() {
                 </div>
             ) : (
                 categories?.map((category) => (
-                    <div key={category._id} className="px-2 py-2 md:px-6 md:py-10 hover:shadow-lg rounded-lg transition-all duration-300 hover:-translate-y-2 hover:bg-yellow-100">
+                    <div key={category._id} className="px-2 py-2 md:px-6 md:py-10 hover:shadow-lg rounded-lg transition-all duration-300 hover:-translate-y-1">
                         <div className="">
                             <div className="space-y-3">
                                 <span className="inline-block rounded-full bg-gray-100 p-3 text-black hover:text-primarys">

@@ -12,21 +12,20 @@ import {
 
 const router = Router();
 
-router.use(verifyJwt); // Apply JWT verification to all routes
 
 router.route("/get-single-category/:categoryId").get(getCategoryById)
 router.route('/category')
-    .post(addCategory)
+    .post(verifyJwt, addCategory)
     .get(fetchAllCategories);
 
 router.route('/add-product')
-    .post(addProductToCategory);
+    .post(verifyJwt, addProductToCategory);
 
 router.route('/delete-category/:id')
-    .delete(removeCategory);
+    .delete(verifyJwt, removeCategory);
 
 router.route('/category/:categoryId/products/:productId')
-    .delete(removeProductFromCategory);
+    .delete(verifyJwt, removeProductFromCategory);
 
 router.route('/category/:categoryId/products')
     .get(getAllProductsInCategory);

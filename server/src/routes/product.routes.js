@@ -13,7 +13,6 @@ import {
 } from "../controllers/product.controller.js";
 
 const router = Router();
-router.use(verifyJwt);
 
 router.route('/get-all-products').get(getAllProducts);
 
@@ -24,16 +23,17 @@ router.route('/add-product').post(
         { name: 'primaryImage', maxCount: 1 },
         { name: 'secondaryImages', maxCount: 3 },
     ]),
+    verifyJwt,
     addProduct
 );
 
 router.route('/:productId')
     .get(getSingleProduct)
-    .patch(updateProduct)
-    .delete(deleteProduct);
+    .patch(verifyJwt, updateProduct)
+    .delete(verifyJwt, deleteProduct);
 
 router.route('/review/:productId')
-    .patch(addReview)
+    .patch(verifyJwt, addReview)
     .get(getProductReviews);
 
 export default router;
